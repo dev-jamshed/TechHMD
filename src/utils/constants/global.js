@@ -1,0 +1,15 @@
+export const SERVER = "main"
+export const PRODUCTION = "production"
+export const DB_NAME = "Digital_Agency"
+export const REQUEST_PAYLOAD_LIMIT = "16kb";
+export const API_PREFIX = "/api";
+export const API_VERSION = "/v1"
+export const ACCESS_TOKEN = "accessToken"
+export const COOKIE_SAMESITE_STRICT = "strict"
+export const COOKIE_SAMESITE_LAX = "lax"
+export const COOKIE_SAMESITE_NONE = "none"
+export const PARAM = "param"
+export const PARAM_AND_BODY = "param_and_body"
+export const COVER = "cover"
+export const LOGO = "logo"
+export const AVATAR = "avatar"
