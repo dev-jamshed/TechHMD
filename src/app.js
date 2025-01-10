@@ -45,6 +45,7 @@ import jobRouter from './routes/job.routes.js';
 import errorLogRouter from './routes/errorLog.routes.js';
 import trafficRouter from './routes/traffic.routes.js';
 import recaptchaRouter from './routes/recaptcha.routes.js';
+import projectRouter from './routes/project.routes.js';
 
 const API_BASE = `${API_PREFIX}${API_VERSION}`;
 
@@ -76,6 +77,7 @@ app.use(`${API_BASE}/jobs`, jobRouter);
 app.use(`${API_BASE}/error-logs`, errorLogRouter);
 app.use(`${API_BASE}/traffic`, trafficRouter);
 app.use(`${API_BASE}/recaptcha`, recaptchaRouter);
+app.use(`${API_BASE}/projects`, projectRouter);
 
 app.use(ApiErrorHandler);
 
