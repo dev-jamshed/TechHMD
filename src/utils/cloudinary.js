@@ -6,13 +6,13 @@ import ApiError from "./ApiError.js";
 
 
 cloudinary.config({
-    // cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    // api_key: process.env.CLOUDINARY_API_KEY,
-    // api_secret: process.env.CLOUDINARY_API_SECRET
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 
-    cloud_name: "ddhoxxqbe",
-    api_key: "952469622347586",
-    api_secret: "2mAoCPs2HPz8K6A2DZSQMwiGiVo"
+    // cloud_name: "ddhoxxqbe",
+    // api_key: "952469622347586",
+    // api_secret: "2mAoCPs2HPz8K6A2DZSQMwiGiVo"
 });
 // console.log('Debugging on Production:', { env: process.env.CLOUDINARY_CLOUD_NAME });
 
