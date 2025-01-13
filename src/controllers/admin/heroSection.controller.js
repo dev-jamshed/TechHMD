@@ -45,6 +45,7 @@ export const createHeroSection = asyncHandler(async (req, res) => {
 // GET: Fetch all Hero Sections
 export const getHeroSections = asyncHandler(async (req, res) => {
   const heroSections = await HeroSection.find();
+  checkNotFound("Hero Sections", heroSections);
   sendResponse(res, STATUS_CODES.SUCCESS, heroSections, "Hero Sections fetched successfully");
 });
 

@@ -19,7 +19,7 @@ const schema = new mongoose.Schema(
     },
     media: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }

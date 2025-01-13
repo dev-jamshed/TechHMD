@@ -7,7 +7,7 @@ const counterSchema = new mongoose.Schema({
         trim: true
     },
     number: {
-        type: Number,
+        type: String,
         required: true
     }
 }, {

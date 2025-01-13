@@ -7,11 +7,10 @@ import {
   updateFAQController 
 } from "../controllers/admin/faq.controller.js";
 import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { continueRequest } from "../middlewares/continueRequest.middleware.js";
 import { validateRequest } from "../middlewares/validation.middleware.js";
 import { ValidMongoId, ZodWrapper } from '../utils/global.js';
 import { faqValidationSchema } from "../schemas/faq.schema.js";
-import { PARAM, PARAM_AND_BODY, PRODUCTION } from '../utils/constants/global.js';
+import { PARAM, PARAM_AND_BODY } from '../utils/constants/global.js';
 
 const router = express.Router();
 
