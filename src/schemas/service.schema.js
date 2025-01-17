@@ -3,6 +3,7 @@ import { z } from 'zod';
 const serviceSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters").max(255, "Name is too long"),
   description: z.string().min(10, "Description must be at least 10 characters").max(1000, "Description is too long"),
+  shortDescription: z.string().optional(),
   slug: z.string().min(3, "Slug must be at least 3 characters").max(100, "Slug is too long"),
   parentService: z.string().optional(),
   metaTitle: z.string().min(3, "Meta Title must be at least 3 characters").max(100, "Meta Title is too long").optional(),

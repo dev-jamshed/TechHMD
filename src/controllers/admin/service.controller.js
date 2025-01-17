@@ -10,7 +10,7 @@ import sendResponse from "../../utils/responseHandler.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 
 const createServiceController = asyncHandler(async (req, res) => {
-  const { name, description, slug, parentService, metaTitle, metaDescription } = req.body;
+  const { name, description, shortDescription, slug, parentService, metaTitle, metaDescription } = req.body;
 
   const serviceExist = await Service.findOne({ slug });
   if (serviceExist) {
@@ -32,6 +32,7 @@ const createServiceController = asyncHandler(async (req, res) => {
   const service = await Service.create({
     name,
     description,
+    shortDescription,
     slug,
     parentService: parentService ? new Types.ObjectId(parentService) : null,
     metaTitle,
@@ -161,7 +162,7 @@ const getSubServices = asyncHandler(async (req, res) => {
 
 const updateServiceController = asyncHandler(async (req, res) => {
   const { slug } = req.params;
-  const { name, description, parentService, metaTitle, metaDescription, newSlug } = req.body;
+  const { name, description, shortDescription, parentService, metaTitle, metaDescription, newSlug } = req.body;
 
   let logo;
   const logoLocalPath = req.file?.path;
@@ -174,7 +175,7 @@ const updateServiceController = asyncHandler(async (req, res) => {
     logo = uploadResponse?.secure_url;
   }
 
-  const serviceDetails = { name, description, parentService, metaTitle, metaDescription, slug: newSlug || slug, logo }
+  const serviceDetails = { name, description, shortDescription, parentService, metaTitle, metaDescription, slug: newSlug || slug, logo }
   const service = await Service.findOneAndUpdate({ slug }, { ...serviceDetails }, { new: true });
   checkNotFound("service", service);
 

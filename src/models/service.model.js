@@ -14,6 +14,10 @@ const schema = new Schema(
       required: true,
       trim: true,
     },
+    shortDescription: {
+      type: String,
+      trim: true,
+    },
     logo: {
       type: String,
       required: true,
