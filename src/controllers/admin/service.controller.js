@@ -141,7 +141,7 @@ const getAllServicesController = asyncHandler(async (req, res) => {
   const services = await Service.aggregate(aggregateOptions);
 
   checkNotFound("services", services);
-  sendResponse(res, STATUS_CODES.SUCCESS, services, "Services fetched successfullyyyy");
+  sendResponse(res, STATUS_CODES.SUCCESS, services, "Services fetched successfully");
 });
 
 const getServiceBySlugController = asyncHandler(async (req, res) => {
