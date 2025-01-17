@@ -22,4 +22,4 @@ jobs:
     # - name: Set up environment variable
     #   run: |
     #     echo "MY_SECRET=${{ secrets.HMD_ENV_FILE }}" > .env
-    # - run: pm2 restart BackendApi
+    - run: pm2 restart BackendApi
