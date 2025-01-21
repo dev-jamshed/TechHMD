@@ -10,7 +10,7 @@ import sendResponse from "../../utils/responseHandler.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 
 const createServiceController = asyncHandler(async (req, res) => {
-  const { name, description, shortDescription, slug, parentService, metaTitle, metaDescription } = req.body;
+  const { name, description, slug, parentService, metaTitle, metaDescription } = req.body;
 
   const serviceExist = await Service.findOne({ slug });
   if (serviceExist) {
@@ -28,11 +28,9 @@ const createServiceController = asyncHandler(async (req, res) => {
   }
 
   logo = await uploadOnServer(logoLocalPath);
-
   const service = await Service.create({
     name,
     description,
-    shortDescription,
     slug,
     parentService: parentService ? new Types.ObjectId(parentService) : null,
     metaTitle,
@@ -160,9 +158,21 @@ const getSubServices = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, subServices, "Sub services fetched successfully");
 });
 
+const getAllSubServicesSlugs = asyncHandler(async (req, res) => {
+  const subServices = await Service.distinct("slug", { parentService: { $exists: true, $ne: null } })
+  checkNotFound("sub services slugs", subServices);
+  sendResponse(res, STATUS_CODES.SUCCESS, subServices, "Sub services slugs fetched successfully");
+});
+
+const getAllParentServicesSlugs = asyncHandler(async (req, res) => {
+  const parentServices = await Service.distinct("slug", { parentService: null })
+  checkNotFound("parent services slugs", parentServices);
+  sendResponse(res, STATUS_CODES.SUCCESS, parentServices, "Parent services slugs fetched successfully");
+});
+
 const updateServiceController = asyncHandler(async (req, res) => {
   const { slug } = req.params;
-  const { name, description, shortDescription, parentService, metaTitle, metaDescription, newSlug } = req.body;
+  const { name, description, parentService, metaTitle, metaDescription, newSlug } = req.body;
 
   let logo;
   const logoLocalPath = req.file?.path;
@@ -171,16 +181,27 @@ const updateServiceController = asyncHandler(async (req, res) => {
     if (existingService && existingService.logo) {
       await deleteImageFromServer(existingService.logo);
     }
-    const uploadResponse = await uploadOnServer(logoLocalPath);
-    logo = uploadResponse?.secure_url;
+    logo = await uploadOnServer(logoLocalPath);
   }
 
-  const serviceDetails = { name, description, shortDescription, parentService, metaTitle, metaDescription, slug: newSlug || slug, logo }
-  const service = await Service.findOneAndUpdate({ slug }, { ...serviceDetails }, { new: true });
+  const serviceDetails = {
+    name,
+    description,
+    parentService,
+    metaTitle,
+    metaDescription,
+    slug: newSlug || slug,
+    ...(logo && { logo: logo.url }) // Only add logo if it exists
+  };
+
+  const service = await Service.findOneAndUpdate(
+    { slug },
+    serviceDetails,
+    { new: true }
+  );
+  
   checkNotFound("service", service);
-
   const updatedSitemap = await updateServiceInSitemap(slug, newSlug || slug);
-
   sendResponse(res, STATUS_CODES.SUCCESS, { service, sitemap: updatedSitemap }, UPDATE_SUCCESS("Service"));
 });
 
@@ -194,4 +215,4 @@ const deleteServiceController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Service"));
 });
 
-export { createServiceController, getAllServicesController, getServiceBySlugController, updateServiceController, deleteServiceController, getSubServices, getParentServices };
+export { createServiceController, getAllServicesController, getServiceBySlugController, updateServiceController, deleteServiceController, getSubServices, getParentServices, getAllParentServicesSlugs, getAllSubServicesSlugs };

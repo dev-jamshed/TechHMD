@@ -18,6 +18,7 @@ const uploadOnServer = async (filePath) => {
     return {
       asset_id: "local_" + Date.now(),
       url: url,
+      secure_url: url,
       original_filename: fileName.split('.')[0],
     };
 
@@ -37,7 +38,7 @@ export const deleteImageFromServer = async (url) => {
       throw new Error('File not found');
     }
   } catch (error) {
-    throw new Error('Failed to delete image from local server');
+    // throw new Error('Failed to delete image from local server');
   }
 };
 
