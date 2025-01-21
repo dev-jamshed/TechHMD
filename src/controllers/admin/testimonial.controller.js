@@ -2,7 +2,7 @@ import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import { Testimonial } from "../../models/testimonial.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
@@ -13,7 +13,7 @@ export const createTestimonial = asyncHandler(async (req, res) => {
   const { title, description, user, position } = req.body;
   let image;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    const result = await uploadOnServer(req.file.path);
     image = result?.url;
   }
 
@@ -54,7 +54,7 @@ export const updateTestimonial = asyncHandler(async (req, res) => {
 
   let image;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    const result = await uploadOnServer(req.file.path);
     image = result?.url;
   }
 

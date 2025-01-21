@@ -1,45 +1,44 @@
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import path from 'path';
+import { fileURLToPath } from "url";
 import { STATUS_CODES } from "./constants/statusCodes.js";
 import { INTERNAL_SERVER_ERROR } from "./constants/message.js";
 import ApiError from "./ApiError.js";
+import asyncHandler from "./asyncHandler.js";
+import fs from "fs";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+const uploadOnServer = async (filePath) => {
+  const fileName = path.basename(filePath);
+  const url = `${process.env.WEBSITE_URL}/uploads/${fileName}`;
 
-    // cloud_name: "ddhoxxqbe",
-    // api_key: "952469622347586",
-    // api_secret: "2mAoCPs2HPz8K6A2DZSQMwiGiVo"
-});
-// console.log('Debugging on Production:', { env: process.env.CLOUDINARY_CLOUD_NAME });
+  try {
+    return {
+      asset_id: "local_" + Date.now(),
+      url: url,
+      original_filename: fileName.split('.')[0],
+    };
 
-const uploadOnCloudinary = async (localFilePath) => {
-    if (!localFilePath) {
-        return null;
-    }
-    try {
-        const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto"
-        });
-        fs.unlinkSync(localFilePath);
-        return response;
-    } catch (error) {
-        fs.unlinkSync(localFilePath);
-        console.error("Error on Uploading File in Cloudinary ❌", error);
-        throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR);
-    }
+  } catch (error) {
+    throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR);
+  }
 };
 
-export const deleteImageFromCloudinary = async (url) => {
-    try {
-        const publicId = url.split('/').pop().split('.')[0];
-        await cloudinary.uploader.destroy(publicId, { invalidate: true });
-    } catch (error) {
-        throw new Error('Failed to delete image from Cloudinary');
+export const deleteImageFromServer = async (url) => {
+  try {
+    const fileName = url.split('/').pop();
+    const filePath = path.join(__dirname, '../../public/uploads', fileName);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    } else {
+      throw new Error('File not found');
     }
+  } catch (error) {
+    throw new Error('Failed to delete image from local server');
+  }
 };
 
-export default uploadOnCloudinary;
+export default uploadOnServer;

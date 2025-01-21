@@ -2,7 +2,7 @@ import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { ProjectModel } from "../../models/project.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer from "../../utils/cloudinary.js";
 import sendResponse from "../../utils/responseHandler.js";
 import { UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 import ApiResponse from "../../utils/ApiResponse.js";
@@ -13,7 +13,7 @@ export const createProjectController = asyncHandler(async (req, res) => {
 
   let image;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    const result = await uploadOnServer(req.file.path);
     image = result?.url;
   }else {
     throw new ApiError(STATUS_CODES.BAD_REQUEST, "validation error", [{
@@ -49,7 +49,7 @@ export const updateProjectController = asyncHandler(async (req, res) => {
 
   let image;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    const result = await uploadOnServer(req.file.path);
     image = result?.url;
   }
 

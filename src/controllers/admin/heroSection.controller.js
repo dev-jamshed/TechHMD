@@ -1,29 +1,27 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import { HeroSection } from "../../models/heroSection.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 
 const saveHeroSection = async (req, res, existingHeroSection = null) => {
-  const { title, description, pageName, serviceId } = req.body;
-
-  if (!pageName && !serviceId) {
-    return sendResponse(res, STATUS_CODES.BAD_REQUEST, null, "Either pageName or serviceId is required");
-  }
+  const { title, description } = req.body;
 
   let media;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    // Delete old media if updating
+    if (existingHeroSection && existingHeroSection.media) {
+      await deleteImageFromServer(existingHeroSection.media);
+    }
+    const result = await uploadOnServer(req.file.path);
     media = result?.url;
   }
 
   const heroSectionData = {
     title,
     description,
-    pageName,
-    serviceId,
     ...(media && { media })
   };
 
@@ -45,7 +43,6 @@ export const createHeroSection = asyncHandler(async (req, res) => {
 // GET: Fetch all Hero Sections
 export const getHeroSections = asyncHandler(async (req, res) => {
   const heroSections = await HeroSection.find();
-  checkNotFound("Hero Sections", heroSections);
   sendResponse(res, STATUS_CODES.SUCCESS, heroSections, "Hero Sections fetched successfully");
 });
 
@@ -57,7 +54,6 @@ export const getHeroSectionByTitle = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, heroSection, "Hero Section fetched successfully");
 });
 
-// GET: Fetch Hero Section by page name or service id
 export const getHeroSectionByPageOrService = asyncHandler(async (req, res) => {
   const { pageName, serviceId } = req.query;
   const query = {};
@@ -89,5 +85,11 @@ export const deleteHeroSection = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const heroSection = await HeroSection.findByIdAndDelete(id);
   checkNotFound("Hero Section", heroSection);
+
+  // Delete associated media
+  if (heroSection.media) {
+    await deleteImageFromServer(heroSection.media);
+  }
+
   sendResponse(res, STATUS_CODES.SUCCESS, heroSection, DELETE_SUCCESS("Hero Section"));
 });

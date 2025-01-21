@@ -3,7 +3,7 @@ import { OurWorkProcess } from "../../models/ourWorkProcess.model.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 import ApiError from "../../utils/ApiError.js";
 import { Types } from "mongoose";
@@ -14,7 +14,7 @@ export const createOurWorkProcess = asyncHandler(async (req, res) => {
 
     let icon;
     if (req.file?.path) {
-        const result = await uploadOnCloudinary(req.file.path);
+        const result = await uploadOnServer(req.file.path);
         icon = result?.url;
     }
 
@@ -54,17 +54,28 @@ export const updateOurWorkProcess = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { serviceId, title, description } = req.body;
 
+    // Check if the work process exists
+    const existingWorkProcess = await OurWorkProcess.findById(id);
+    checkNotFound("Our Work Process", existingWorkProcess);
+
     let icon;
     if (req.file?.path) {
-        const result = await uploadOnCloudinary(req.file.path);
+        // Delete old image
+        if (existingWorkProcess.icon) {
+            await deleteImageFromServer(existingWorkProcess.icon);
+        }
+        const result = await uploadOnServer(req.file.path);
         icon = result?.url;
     }
 
-    const ourWorkProcess = await OurWorkProcess.findById(id);
-    checkNotFound("Our Work Process", ourWorkProcess);
-    Object.assign(ourWorkProcess, { serviceId, ...(icon && { icon }), title, description });
-    await ourWorkProcess.save();
-    sendResponse(res, STATUS_CODES.SUCCESS, ourWorkProcess, UPDATE_SUCCESS("Our Work Process"));
+    const updatedData = { serviceId, title, description };
+    if (icon) {
+        updatedData.icon = icon;
+    }
+
+    Object.assign(existingWorkProcess, updatedData);
+    await existingWorkProcess.save();
+    sendResponse(res, STATUS_CODES.SUCCESS, existingWorkProcess, UPDATE_SUCCESS("Our Work Process"));
 });
 
 // DELETE: Delete Our Work Process by ID

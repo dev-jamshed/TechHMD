@@ -1,10 +1,10 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import { BlogsModel } from "../../models/blog.model.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS,DELETE_SUCCESS } from "../../utils/constants/message.js";
+import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 
 // Create a new Blog
 export const createBlog = asyncHandler(async (req, res) => {
@@ -13,7 +13,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 
   // Upload cover if file exists
   if (coverLocalPath) {
-    cover = await uploadOnCloudinary(coverLocalPath);
+    cover = await uploadOnServer(coverLocalPath);
   }
 
   const blogData = {
@@ -49,7 +49,6 @@ export const updateBlog = asyncHandler(async (req, res) => {
 
   // Check if the blog exists
   const existingBlog = await BlogsModel.findById(id);
-
   checkNotFound("Blog", existingBlog);
 
   let cover;
@@ -57,7 +56,11 @@ export const updateBlog = asyncHandler(async (req, res) => {
 
   // Upload new cover if a file is provided
   if (coverLocalPath) {
-    cover = await uploadOnCloudinary(coverLocalPath);
+    // Delete old cover image
+    if (existingBlog.cover) {
+      await deleteImageFromServer(existingBlog.cover);
+    }
+    cover = await uploadOnServer(coverLocalPath);
   }
 
   // Prepare updated data
@@ -80,8 +83,12 @@ export const deleteBlog = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const blog = await BlogsModel.findByIdAndDelete(id);
-
   checkNotFound("Blog", blog);
+
+  // Delete associated cover image
+  if (blog.cover) {
+    await deleteImageFromServer(blog.cover);
+  }
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Blog"));
 });

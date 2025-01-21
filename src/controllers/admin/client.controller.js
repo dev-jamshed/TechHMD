@@ -1,6 +1,6 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import { Client } from "../../models/client.model.js";
-import uploadOnCloudinary, { deleteImageFromCloudinary } from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
@@ -23,7 +23,7 @@ export const createClient = asyncHandler(async (req, res) => {
       }
 
   
-        const uploadResponse = await uploadOnCloudinary(logoLocalPath);
+        const uploadResponse = await uploadOnServer(logoLocalPath);
         logo = uploadResponse?.secure_url;
    
 
@@ -56,9 +56,9 @@ export const updateClient = asyncHandler(async (req, res) => {
     if (logoLocalPath) {
         const existingClient = await Client.findById(id);
         if (existingClient && existingClient.logo) {
-            await deleteImageFromCloudinary(existingClient.logo);
+            await deleteImageFromServer(existingClient.logo);
         }
-        const uploadResponse = await uploadOnCloudinary(logoLocalPath);
+        const uploadResponse = await uploadOnServer(logoLocalPath);
         logo = uploadResponse?.secure_url;
     }
 
@@ -74,7 +74,7 @@ export const deleteClient = asyncHandler(async (req, res) => {
     const client = await Client.findByIdAndDelete(id);
     checkNotFound("Client", client);
     if (client.logo) {
-        await deleteImageFromCloudinary(client.logo);
+        await deleteImageFromServer(client.logo);
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Client"));
 });

@@ -1,11 +1,22 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { fileURLToPath } from "url";
+import path from "path";
 import { ApiErrorHandler } from "./middlewares/errorHandler.middleware.js";
 import { REQUEST_PAYLOAD_LIMIT, API_VERSION, API_PREFIX } from './utils/constants/global.js';
 import { captureTraffic } from './middlewares/traffic.middleware.js';
 
+
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
+
+
 
 app.use(cors({
     credentials: true,

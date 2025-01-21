@@ -1,7 +1,7 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { Service } from "../../models/service.model.js";
-import uploadOnCloudinary, { deleteImageFromCloudinary } from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { addServiceToSitemap, updateServiceInSitemap } from "../../utils/sitemap.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
@@ -27,7 +27,7 @@ const createServiceController = asyncHandler(async (req, res) => {
     }])
   }
 
-  logo = await uploadOnCloudinary(logoLocalPath);
+  logo = await uploadOnServer(logoLocalPath);
 
   const service = await Service.create({
     name,
@@ -169,9 +169,9 @@ const updateServiceController = asyncHandler(async (req, res) => {
   if (logoLocalPath) {
     const existingService = await Service.findOne({ slug });
     if (existingService && existingService.logo) {
-      await deleteImageFromCloudinary(existingService.logo);
+      await deleteImageFromServer(existingService.logo);
     }
-    const uploadResponse = await uploadOnCloudinary(logoLocalPath);
+    const uploadResponse = await uploadOnServer(logoLocalPath);
     logo = uploadResponse?.secure_url;
   }
 
@@ -189,7 +189,7 @@ const deleteServiceController = asyncHandler(async (req, res) => {
   const service = await Service.findOneAndDelete({ slug });
   checkNotFound("service", service);
   if (service.logo) {
-    await deleteImageFromCloudinary(service.logo);
+    await deleteImageFromServer(service.logo);
   }
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Service"));
 });

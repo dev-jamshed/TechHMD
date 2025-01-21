@@ -1,6 +1,6 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import { PrivacyPolicy } from "../../models/privacyPolicy.model.js";
-import uploadOnCloudinary, { deleteImageFromCloudinary } from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
@@ -13,7 +13,7 @@ export const createPrivacyPolicy = asyncHandler(async (req, res) => {
     const imageLocalPath = req.file?.path;
 
     if (imageLocalPath) {
-        const uploadResponse = await uploadOnCloudinary(imageLocalPath);
+        const uploadResponse = await uploadOnServer(imageLocalPath);
         image = uploadResponse?.secure_url;
     }
 
@@ -46,19 +46,24 @@ export const getDefaultPrivacyPolicy = asyncHandler(async (req, res) => {
 export const updatePrivacyPolicy = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
+
+    // Check if the privacy policy exists
+    const existingPrivacyPolicy = await PrivacyPolicy.findById(id);
+    checkNotFound("Privacy Policy", existingPrivacyPolicy);
+
     let image;
     const imageLocalPath = req.file?.path;
 
     if (imageLocalPath) {
-        const existingPolicy = await PrivacyPolicy.findById(id);
-        if (existingPolicy && existingPolicy.image) {
-            await deleteImageFromCloudinary(existingPolicy.image);
+        // Delete old image
+        if (existingPrivacyPolicy.image) {
+            await deleteImageFromServer(existingPrivacyPolicy.image);
         }
-        const uploadResponse = await uploadOnCloudinary(imageLocalPath);
+        const uploadResponse = await uploadOnServer(imageLocalPath);
         image = uploadResponse?.secure_url;
     }
 
-    const updatedPrivacyPolicy = { title, content, image };
+    const updatedPrivacyPolicy = { title, content, ...(image && { image }) };
     const privacyPolicy = await PrivacyPolicy.findByIdAndUpdate(id, updatedPrivacyPolicy, { new: true });
     checkNotFound("Privacy Policy", privacyPolicy);
     sendResponse(res, STATUS_CODES.SUCCESS, privacyPolicy, UPDATE_SUCCESS("Privacy Policy"));
@@ -70,7 +75,7 @@ export const deletePrivacyPolicy = asyncHandler(async (req, res) => {
     const privacyPolicy = await PrivacyPolicy.findByIdAndDelete(id);
     checkNotFound("Privacy Policy", privacyPolicy);
     if (privacyPolicy.image) {
-        await deleteImageFromCloudinary(privacyPolicy.image);
+        await deleteImageFromServer(privacyPolicy.image);
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Privacy Policy"));
 });

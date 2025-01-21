@@ -1,7 +1,7 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { CompanyDetailModel } from "../../models/companyDetail.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
@@ -38,8 +38,8 @@ const createCompanyDetailController = asyncHandler(async (req, res) => {
     ]);
   }
 
-  headerLogo = await uploadOnCloudinary(headerLogoLocalPath);
-  footerLogo = await uploadOnCloudinary(footerLogoLocalPath);
+  headerLogo = await uploadOnServer(headerLogoLocalPath);
+  footerLogo = await uploadOnServer(footerLogoLocalPath);
 
   const companyDetail = await CompanyDetailModel.create({
     name,
@@ -86,18 +86,34 @@ const updateCompanyDetailController = asyncHandler(async (req, res) => {
     robotsTxt,
   } = req.body;
 
+  // Check if the company detail exists
+  const existingCompanyDetail = await CompanyDetailModel.findOne();
+  checkNotFound("Company detail", existingCompanyDetail);
+
   let headerLogo, footerLogo, ogImage;
 
   if (req.files?.headerLogo?.[0]?.path) {
-    headerLogo = await uploadOnCloudinary(req.files.headerLogo[0].path);
+    // Delete old header logo
+    if (existingCompanyDetail.headerLogo) {
+      await deleteImageFromServer(existingCompanyDetail.headerLogo);
+    }
+    headerLogo = await uploadOnServer(req.files.headerLogo[0].path);
   }
 
   if (req.files?.footerLogo?.[0]?.path) {
-    footerLogo = await uploadOnCloudinary(req.files.footerLogo[0].path);
+    // Delete old footer logo
+    if (existingCompanyDetail.footerLogo) {
+      await deleteImageFromServer(existingCompanyDetail.footerLogo);
+    }
+    footerLogo = await uploadOnServer(req.files.footerLogo[0].path);
   }
 
   if (req.files?.ogImage?.[0]?.path) {
-    ogImage = await uploadOnCloudinary(req.files.ogImage[0].path);
+    // Delete old og image
+    if (existingCompanyDetail.seo?.ogImage) {
+      await deleteImageFromServer(existingCompanyDetail.seo.ogImage);
+    }
+    ogImage = await uploadOnServer(req.files.ogImage[0].path);
   }
 
   const updatedDetails = {

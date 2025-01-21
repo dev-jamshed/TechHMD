@@ -3,14 +3,15 @@ import ApiError from "../../utils/ApiError.js";
 import { PrimaryBanner } from "../../models/primaryBanner.model.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer ,{deleteImageFromServer} from "../../utils/cloudinary.js";
 import sendResponse from "../../utils/responseHandler.js";
 
 const createPrimaryBanner = asyncHandler(async (req, res) => {
     const { title, description, pageName } = req.body;
     let primaryImage, secondaryImage;
     if (req.files?.primaryImage?.[0]?.path) {
-        const result = await uploadOnCloudinary(req.files.primaryImage[0].path);
+        
+        const result = await uploadOnServer(req.files.primaryImage[0].path);
         primaryImage = result?.url;
     } else {
         throw new ApiError(STATUS_CODES.BAD_REQUEST, "validation error", [{
@@ -20,7 +21,7 @@ const createPrimaryBanner = asyncHandler(async (req, res) => {
     }
 
     if (req.files?.secondaryImage?.[0]?.path) {
-        const result = await uploadOnCloudinary(req.files.secondaryImage[0].path);
+        const result = await uploadOnServer(req.files.secondaryImage[0].path);
         secondaryImage = result?.url;
     }
 
@@ -58,12 +59,12 @@ const updatePrimaryBanner = asyncHandler(async (req, res) => {
 
     let primaryImage, secondaryImage;
     if (req.files?.primaryImage?.[0]?.path) {
-        const result = await uploadOnCloudinary(req.files.primaryImage[0].path);
+        const result = await uploadOnServer(req.files.primaryImage[0].path);
         primaryImage = result?.url;
     }
 
     if (req.files?.secondaryImage?.[0]?.path) {
-        const result = await uploadOnCloudinary(req.files.secondaryImage[0].path);
+        const result = await uploadOnServer(req.files.secondaryImage[0].path);
         secondaryImage = result?.url;
     }
 

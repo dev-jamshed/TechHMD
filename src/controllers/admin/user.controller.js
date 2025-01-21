@@ -1,7 +1,7 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { User } from "../../models/user.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer from "../../utils/cloudinary.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import { generateJwtToken } from "../../utils/auth.js";
 import bcrypt from "bcrypt";
@@ -21,7 +21,7 @@ const registerController = asyncHandler(async (req, res) => {
   let avatar;
   const avtarLocalPath = req.file?.path;
   if (avtarLocalPath) {
-    avatar = await uploadOnCloudinary(avtarLocalPath);
+    avatar = await uploadOnServer(avtarLocalPath);
   }
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 

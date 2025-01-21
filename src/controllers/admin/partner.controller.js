@@ -1,6 +1,6 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import { Partner } from "../../models/partner.model.js";
-import uploadOnCloudinary, { deleteImageFromCloudinary } from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import checkNotFound from "../../utils/checkNotFound.js";
 import sendResponse from "../../utils/responseHandler.js";
@@ -22,7 +22,7 @@ export const createPartner = asyncHandler(async (req, res) => {
         ]);
     }
 
-    const uploadResponse = await uploadOnCloudinary(logoLocalPath);
+    const uploadResponse = await uploadOnServer(logoLocalPath);
     logo = uploadResponse?.secure_url;
 
     const partner = await Partner.create({ name, logo, description, website_url, is_featured });
@@ -48,19 +48,24 @@ export const getPartnerById = asyncHandler(async (req, res) => {
 export const updatePartner = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { name, description, website_url, is_featured } = req.body;
+
+    // Check if the partner exists
+    const existingPartner = await Partner.findById(id);
+    checkNotFound("Partner", existingPartner);
+
     let logo;
     const logoLocalPath = req.file?.path;
 
     if (logoLocalPath) {
-        const existingPartner = await Partner.findById(id);
-        if (existingPartner && existingPartner.logo) {
-            await deleteImageFromCloudinary(existingPartner.logo);
+        // Delete old logo
+        if (existingPartner.logo) {
+            await deleteImageFromServer(existingPartner.logo);
         }
-        const uploadResponse = await uploadOnCloudinary(logoLocalPath);
+        const uploadResponse = await uploadOnServer(logoLocalPath);
         logo = uploadResponse?.secure_url;
     }
 
-    const updatedPartner = { name, description, website_url, is_featured, logo };
+    const updatedPartner = { name, description, website_url, is_featured, ...(logo && { logo }) };
     const partner = await Partner.findByIdAndUpdate(id, updatedPartner, { new: true });
     checkNotFound("Partner", partner);
     sendResponse(res, STATUS_CODES.SUCCESS, partner, UPDATE_SUCCESS("Partner"));
@@ -72,7 +77,7 @@ export const deletePartner = asyncHandler(async (req, res) => {
     const partner = await Partner.findByIdAndDelete(id);
     checkNotFound("Partner", partner);
     if (partner.logo) {
-        await deleteImageFromCloudinary(partner.logo);
+        await deleteImageFromServer(partner.logo);
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Partner"));
 });

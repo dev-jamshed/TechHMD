@@ -1,7 +1,7 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { WhatWeDo } from "../../models/WhatWeDo.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
 import checkNotFound from "../../utils/checkNotFound.js";
@@ -20,7 +20,7 @@ const createWhatWeDo = asyncHandler(async (req, res) => {
   // Handle image upload if exists
   const imageLocalPath = req.file?.path;
   if (imageLocalPath) {
-    image = await uploadOnCloudinary(imageLocalPath);
+    image = await uploadOnServer(imageLocalPath);
   }
 
   // Create new service
@@ -67,10 +67,19 @@ const updateService = asyncHandler(async (req, res) => {
   const { title, description ,serviceId} = req.body;
   let image;
 
+  // Check if the service exists
+  const existingService = await WhatWeDo.findById(id);
+  checkNotFound("service", existingService);
+
   // Handle image upload if exists
   const imageLocalPath = req.file?.path;
   if (imageLocalPath) {
-    image = await uploadOnCloudinary(imageLocalPath);
+    // Delete old image
+    if (existingService.image) {
+      await deleteImageFromServer(existingService.image);
+    }
+    const uploadResponse = await uploadOnServer(imageLocalPath);
+    image = uploadResponse?.url;
   }
 
   // Find and update the service by _id

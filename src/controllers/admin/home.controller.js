@@ -2,7 +2,7 @@ import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiError from "../../utils/ApiError.js";
 import { HomeModel } from "../../models/home.model.js";
-import uploadOnCloudinary from "../../utils/cloudinary.js";
+import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
 import sendResponse from "../../utils/responseHandler.js";
 import { UPDATE_SUCCESS } from "../../utils/constants/message.js";
 import ApiResponse from "../../utils/ApiResponse.js";
@@ -10,9 +10,16 @@ import ApiResponse from "../../utils/ApiResponse.js";
 export const createOrUpdateHomeController = asyncHandler(async (req, res) => {
   const { heading, description } = req.body;
 
+  // Check if the home section exists
+  const existingHome = await HomeModel.findOne();
+
   let media;
   if (req.file?.path) {
-    const result = await uploadOnCloudinary(req.file.path);
+    // Delete old media if updating
+    if (existingHome && existingHome.media) {
+      await deleteImageFromServer(existingHome.media);
+    }
+    const result = await uploadOnServer(req.file.path);
     media = result?.url;
   }
 
