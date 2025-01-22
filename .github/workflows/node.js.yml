@@ -12,39 +12,14 @@ jobs:
         node-version: [22.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Backup files from uploads folder
-      run: |
-        UPLOADS_PATH="/home/ubuntu/actions-runner/_work/TechHMD/TechHMD/public/uploads"
-        BACKUP_PATH="/tmp/uploads_backup"
-        if [ -d "$UPLOADS_PATH" ]; then
-          mkdir -p $BACKUP_PATH
-          rsync -av --ignore-existing $UPLOADS_PATH/ $BACKUP_PATH/
-        fi
-
-    - name: Deploy application
-      run: |
-        DEPLOY_PATH="/home/ubuntu/actions-runner/_work/TechHMD/TechHMD/"
-        UPLOADS_PATH="$DEPLOY_PATH/public/uploads"
-        BACKUP_PATH="/tmp/uploads_backup"
-        rsync -av --exclude='node_modules' --exclude='public/uploads' ./ $DEPLOY_PATH
-        if [ -d "$BACKUP_PATH" ]; then
-          mkdir -p $UPLOADS_PATH
-          rsync -av --ignore-existing $BACKUP_PATH/ $UPLOADS_PATH/
-        fi
-
-    - name: Restart PM2
-      run: |
-        pm2 delete BackendApi || true
-        pm2 start /home/ubuntu/actions-runner/_work/TechHMD/TechHMD/server.js --name BackendApi --env production
+    - run: npm ci
+    # - name: Set up environment variable
+    #   run: |
+    #     echo "MY_SECRET=${{ secrets.HMD_ENV_FILE }}" > .env
+    - run: pm2 restart BackendApi
