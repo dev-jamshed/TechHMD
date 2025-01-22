@@ -12,15 +12,27 @@ const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
-
 app.use(cors({
     credentials: true,
-    origin: [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        // if (!origin) {
+        //     return callback(null, true);
+        // }
+
+        const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN];
+    
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 app.use(cookieParser());
 app.use(express.json({ limit: REQUEST_PAYLOAD_LIMIT }));
