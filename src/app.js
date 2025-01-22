@@ -15,12 +15,11 @@ const __dirname = path.dirname(__filename);
 
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
-
-
-
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_ORIGIN,
+    origin: [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(cookieParser());
