@@ -1,6 +1,6 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const pageMetaTagsSchema = z.object({
+const pageMetaTagsSchema = z.object({
   pageName: z.string().min(1, "Page Name is required"),
   metaTitle: z.string().min(1, "Meta Title is required"),
   metaDescription: z.string().min(1, "Meta Description is required"),
@@ -10,4 +10,6 @@ export const pageMetaTagsSchema = z.object({
   pageContent: z.string().min(1, "Page Content is required"),
   organizationSchema: z.string().min(1, "Organization Schema is required")
 });
+
+module.exports = { pageMetaTagsSchema };
 

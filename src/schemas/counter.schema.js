@@ -1,6 +1,8 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const counterSchema = z.object({
+const counterSchema = z.object({
     title: z.string(),
     number: z.string(),
 });
+
+module.exports = { counterSchema };

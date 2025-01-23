@@ -1,21 +1,20 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createPrivacyPolicy,
     getPrivacyPolicies,
     getPrivacyPolicyById,
     updatePrivacyPolicy,
     deletePrivacyPolicy,
     getDefaultPrivacyPolicy
-} from "../controllers/admin/privacyPolicy.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { privacyPolicySchema } from "../schemas/privacyPolicy.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js'
+} = require("../controllers/admin/privacyPolicy.controller.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { privacyPolicySchema } = require("../schemas/privacyPolicy.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
 
 const router = express.Router();
-
 
 router.get("/", getPrivacyPolicies);
 
@@ -31,7 +30,6 @@ router.get("/default", getDefaultPrivacyPolicy);
 
 router.get("/:id", validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), getPrivacyPolicyById);
 
-
 router.put(
     "/:id",
     verifyJwt,
@@ -42,4 +40,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deletePrivacyPolicy);
 
-export default router;
+module.exports = router;

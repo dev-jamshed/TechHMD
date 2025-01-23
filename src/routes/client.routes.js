@@ -1,11 +1,11 @@
-import express from "express";
-import { createClient, deleteClient, getClientById, getClients, updateClient } from "../controllers/admin/client.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { clientSchema } from "../schemas/client/client.schema.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM, PARAM_AND_BODY } from '../utils/constants/global.js';
+const express = require("express");
+const { createClient, deleteClient, getClientById, getClients, updateClient } = require("../controllers/admin/client.controller.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { clientSchema } = require("../schemas/client/client.schema.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM, PARAM_AND_BODY } = require('../utils/constants/global.js');
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get('/', getClients);
 router.put('/:id', verifyJwt, upload.single('logo'), validateRequest({ ...ZodWrapper({ id: ValidMongoId }), ...clientSchema }, PARAM_AND_BODY), updateClient);
 router.delete('/:id', verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteClient);
 
-export default router;
+module.exports = router;

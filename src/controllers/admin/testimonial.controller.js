@@ -1,15 +1,15 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import { Testimonial } from "../../models/testimonial.model.js";
-import uploadOnServer from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import sendResponse from "../../utils/responseHandler.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const ApiResponse = require("../../utils/ApiResponse.js");
+const { Testimonial } = require("../../models/testimonial.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const sendResponse = require("../../utils/responseHandler.js");
 
 // POST: Create a new Testimonial
-export const createTestimonial = asyncHandler(async (req, res) => {
+const createTestimonial = asyncHandler(async (req, res) => {
   const { title, description, user, position } = req.body;
   let image;
   if (req.file?.path) {
@@ -29,7 +29,7 @@ export const createTestimonial = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Testimonials
-export const getAllTestimonials = asyncHandler(async (req, res) => {
+const getAllTestimonials = asyncHandler(async (req, res) => {
   const testimonials = await Testimonial.find();
 
   checkNotFound("testimonials", testimonials);
@@ -38,7 +38,7 @@ export const getAllTestimonials = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch Testimonial by ID
-export const getTestimonialById = asyncHandler(async (req, res) => {
+const getTestimonialById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const testimonial = await Testimonial.findById(id);
@@ -48,7 +48,7 @@ export const getTestimonialById = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Testimonial
-export const updateTestimonial = asyncHandler(async (req, res) => {
+const updateTestimonial = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { title, description, user, position } = req.body;
 
@@ -70,7 +70,7 @@ export const updateTestimonial = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Testimonial
-export const deleteTestimonial = asyncHandler(async (req, res) => {
+const deleteTestimonial = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const testimonial = await Testimonial.findByIdAndDelete(id);
@@ -78,3 +78,11 @@ export const deleteTestimonial = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Testimonial"));
 });
+
+module.exports = {
+  createTestimonial,
+  getAllTestimonials,
+  getTestimonialById,
+  updateTestimonial,
+  deleteTestimonial
+};

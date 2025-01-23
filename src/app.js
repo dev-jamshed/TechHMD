@@ -1,39 +1,32 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import { fileURLToPath } from "url";
-import path from "path";
-import { ApiErrorHandler } from "./middlewares/errorHandler.middleware.js";
-import { REQUEST_PAYLOAD_LIMIT, API_VERSION, API_PREFIX } from './utils/constants/global.js';
-import { captureTraffic } from './middlewares/traffic.middleware.js';
-
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const { ApiErrorHandler } = require("./middlewares/errorHandler.middleware.js");
+const { REQUEST_PAYLOAD_LIMIT, API_VERSION, API_PREFIX } = require('./utils/constants/global.js');
+const { captureTraffic } = require('./middlewares/traffic.middleware.js');
 
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// app.use(cors({
+//     credentials: true,
+//     origin: (origin, callback) => {
+//         const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN];
+    
+//         if (allowedOrigins.indexOf(origin) !== -1) {
+//             callback(null, true);
+//         } else {
+//             callback(new ApiError('Not allowed by CORS'));
+//         }
+//     },
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
 app.use(cors({
     credentials: true,
-    origin: (origin, callback) => {
-        const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN];
-    
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new ApiError('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: process.env.CLIENT_ORIGIN,
 }));
-
-// app.use(cors({
-//     credentials: true,
-//     origin: process.env.CLIENT_ORIGIN,
-// }));
-
 
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
@@ -43,38 +36,37 @@ app.use(express.urlencoded({ extended: true, limit: REQUEST_PAYLOAD_LIMIT }));
 
 app.use(captureTraffic);
 
-import userRouter from "./routes/user.routes.js";
-import serviceRouter from "./routes/service.routes.js";
-import inquiryRouter from "./routes/inquiry.routes.js";
-import blogsRouter from "./routes/blog.routes.js";
-import commentsRouter from "./routes/comment.routes.js";
-import contactRouter from "./routes/contact.routes.js";
-import companyDetailRouter from "./routes/companyDetail.routes.js";
-import packageRouter from "./routes/package.routes.js";
-import heroSessionRouter from "./routes/heroSection.routes.js";
-import testimonialRouter from "./routes/testimonial.routes.js";
-import faqRouter from "./routes/faq.router.js";
-import aboutRouter from "./routes/about.routes.js";
-import homeRouter from "./routes/home.routes.js";
-import whatWeDoRouter from "./routes/whatWeDo.routes.js";
-import counterRouter from './routes/counter.routes.js';
-import privacyPolicyRouter from './routes/privacyPolicy.routes.js';
-import ourWorkProcessRouter from './routes/ourWorkProcess.routes.js';
-import aboutOurWorkProcessRouter from './routes/aboutOurWorkProcess.routes.js';
-import coreValueRouter from './routes/coreValue.routes.js';
-import pageMetaTagsRouter from './routes/pageMetaTags.routes.js';
-import clientRouter from './routes/client.routes.js';
-import partnerRouter from './routes/partner.routes.js';
-import ourCoreTeamRouter from './routes/ourCoreTeam.routes.js';
-import jobRouter from './routes/job.routes.js';
-import errorLogRouter from './routes/errorLog.routes.js';
-import trafficRouter from './routes/traffic.routes.js';
-import recaptchaRouter from './routes/recaptcha.routes.js';
-import projectRouter from './routes/project.routes.js';
-import primaryBannerRoutes from './routes/primaryBanner.routes.js';
-import innovationRoutes from './routes/innovation.routes.js';
-import ApiError from "./utils/ApiError.js";
-
+const userRouter = require("./routes/user.routes.js");
+const serviceRouter = require("./routes/service.routes.js");
+const inquiryRouter = require("./routes/inquiry.routes.js");
+const blogsRouter = require("./routes/blog.routes.js");
+const commentsRouter = require("./routes/comment.routes.js");
+const contactRouter = require("./routes/contact.routes.js");
+const companyDetailRouter = require("./routes/companyDetail.routes.js");
+const packageRouter = require("./routes/package.routes.js");
+const heroSessionRouter = require("./routes/heroSection.routes.js");
+const testimonialRouter = require("./routes/testimonial.routes.js");
+const faqRouter = require("./routes/faq.router.js");
+const aboutRouter = require("./routes/about.routes.js");
+const homeRouter = require("./routes/home.routes.js");
+const whatWeDoRouter = require("./routes/whatWeDo.routes.js");
+const counterRouter = require('./routes/counter.routes.js');
+const privacyPolicyRouter = require('./routes/privacyPolicy.routes.js');
+const ourWorkProcessRouter = require('./routes/ourWorkProcess.routes.js');
+const aboutOurWorkProcessRouter = require('./routes/aboutOurWorkProcess.routes.js');
+const coreValueRouter = require('./routes/coreValue.routes.js');
+const pageMetaTagsRouter = require('./routes/pageMetaTags.routes.js');
+const clientRouter = require('./routes/client.routes.js');
+const partnerRouter = require('./routes/partner.routes.js');
+const ourCoreTeamRouter = require('./routes/ourCoreTeam.routes.js');
+const jobRouter = require('./routes/job.routes.js');
+const errorLogRouter = require('./routes/errorLog.routes.js');
+const trafficRouter = require('./routes/traffic.routes.js');
+const recaptchaRouter = require('./routes/recaptcha.routes.js');
+const projectRouter = require('./routes/project.routes.js');
+const primaryBannerRoutes = require('./routes/primaryBanner.routes.js');
+const innovationRoutes = require('./routes/innovation.routes.js');
+const ApiError = require("./utils/ApiError.js");
 
 const API_BASE = `${API_PREFIX}${API_VERSION}`;
 
@@ -112,4 +104,4 @@ app.use(`${API_BASE}/innovations`, innovationRoutes);
 
 app.use(ApiErrorHandler);
 
-export default app;
+module.exports = app;

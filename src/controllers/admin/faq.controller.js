@@ -1,13 +1,13 @@
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { FAQModel } from "../../models/faq.model.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS,DELETE_SUCCESS } from "../../utils/constants/message.js";
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { FAQModel } = require("../../models/faq.model.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // Create a new FAQ
-export const createFAQController = asyncHandler(async (req, res) => {
+const createFAQController = asyncHandler(async (req, res) => {
   const { question, answer } = req.body;
   const faq = await FAQModel.create({
     question,
@@ -22,7 +22,7 @@ export const createFAQController = asyncHandler(async (req, res) => {
 });
 
 // Get all FAQs
-export const getAllFAQsController = asyncHandler(async (req, res) => {
+const getAllFAQsController = asyncHandler(async (req, res) => {
   const faqs = await FAQModel.find();
   
   checkNotFound("faqs", faqs);
@@ -31,7 +31,7 @@ export const getAllFAQsController = asyncHandler(async (req, res) => {
 });
 
 // Get a single FAQ by ID
-export const getFAQByIdController = asyncHandler(async (req, res) => {
+const getFAQByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const faq = await FAQModel.findById(id);
 
@@ -41,7 +41,7 @@ export const getFAQByIdController = asyncHandler(async (req, res) => {
 });
 
 // Update an FAQ
-export const updateFAQController = asyncHandler(async (req, res) => {
+const updateFAQController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { question, answer } = req.body;
   const updatedFAQ = await FAQModel.findByIdAndUpdate(
@@ -56,7 +56,7 @@ export const updateFAQController = asyncHandler(async (req, res) => {
 });
 
 // Delete an FAQ
-export const deleteFAQController = asyncHandler(async (req, res) => {
+const deleteFAQController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const deletedFAQ = await FAQModel.findByIdAndDelete(id);
@@ -65,3 +65,11 @@ export const deleteFAQController = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("FAQ"));
 });
+
+module.exports = {
+  createFAQController,
+  getAllFAQsController,
+  getFAQByIdController,
+  updateFAQController,
+  deleteFAQController
+};

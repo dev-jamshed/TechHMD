@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema({
     title: {
@@ -23,4 +23,5 @@ const jobSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-export const Job = mongoose.model('Job', jobSchema);
+const Job = mongoose.model('Job', jobSchema);
+module.exports = { Job };

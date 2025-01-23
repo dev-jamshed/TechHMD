@@ -1,3 +1,5 @@
-export const continueRequest = (_, __, next) => {
-    next()
-}
+const continueRequest = (_, __, next) => {
+    next();
+};
+
+module.exports = { continueRequest };

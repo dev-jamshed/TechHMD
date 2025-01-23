@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const errorLogSchema = new mongoose.Schema({
     message: { type: String, required: true },
@@ -10,4 +10,4 @@ const errorLogSchema = new mongoose.Schema({
 
 const ErrorLog = mongoose.model('ErrorLog', errorLogSchema);
 
-export default ErrorLog;
+module.exports = ErrorLog;

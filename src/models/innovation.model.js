@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const innovationItemSchema = new mongoose.Schema({
     icon: {
@@ -35,4 +35,5 @@ const innovationSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const Innovation = mongoose.model('Innovation', innovationSchema);
+const Innovation = mongoose.model('Innovation', innovationSchema);
+module.exports = { Innovation };

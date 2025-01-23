@@ -1,13 +1,18 @@
-import { z } from "zod";
-import { Types } from "mongoose"
+const { z } = require("zod");
+const { Types } = require("mongoose");
 
-export const ValidMongoId = z.string().refine(
+const ValidMongoId = z.string().refine(
     (val) => Types.ObjectId.isValid(val),
     {
         message: 'Invalid ObjectId',
     }
 );
 
-export const ZodWrapper = (object) => {
-    return z.object(object)
-}
+const ZodWrapper = (object) => {
+    return z.object(object);
+};
+
+module.exports = {
+    ValidMongoId,
+    ZodWrapper
+};

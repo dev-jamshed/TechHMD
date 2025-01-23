@@ -1,19 +1,19 @@
-import express from "express";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+const express = require("express");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
-import {
+const {
   createTestimonial,
   getAllTestimonials,
   getTestimonialById,
   updateTestimonial,
   deleteTestimonial
-} from "../controllers/admin/testimonial.controller.js";
+} = require("../controllers/admin/testimonial.controller.js");
 
-import { testimonialSchema } from "../schemas/testimonial.schema.js";
+const { testimonialSchema } = require("../schemas/testimonial.schema.js");
 
 const router = express.Router();
 
@@ -31,4 +31,4 @@ router.get("/:id", validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), get
 router.put("/:id", verifyJwt, upload.single("image"), validateRequest({ ...ZodWrapper({ id: ValidMongoId }), ...testimonialSchema }, PARAM_AND_BODY), updateTestimonial);
 router.delete("/:id", verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteTestimonial);
 
-export default router;
+module.exports = router;

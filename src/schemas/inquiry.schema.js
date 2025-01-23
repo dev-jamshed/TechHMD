@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { ValidMongoId } from "../utils/global.js";
+const { z } = require("zod");
+const { ValidMongoId } = require("../utils/global.js");
 
-export const inquirySchema = z.object({
+const inquirySchema = z.object({
   name: z
     .string({ required_error: "Name is required" })
     .min(2, { message: "Name must be at least 2 characters long" }),
@@ -17,3 +17,5 @@ export const inquirySchema = z.object({
   serviceId: ValidMongoId,
   packageId: ValidMongoId
 });
+
+module.exports = { inquirySchema };

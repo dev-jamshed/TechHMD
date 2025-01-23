@@ -1,17 +1,17 @@
-import express from "express";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import {
+const express = require("express");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const {
   createHeroSection,
   getHeroSections,
   updateHeroSection,
   deleteHeroSection,
   getHeroSectionByTitle,
   getHeroSectionByPageOrService,
-} from "../controllers/admin/heroSection.controller.js";
-import { heroSectionSchema } from "../schemas/heroSection.schema.js";
-import { PARAM_AND_BODY } from "../utils/constants/global.js";
+} = require("../controllers/admin/heroSection.controller.js");
+const { heroSectionSchema } = require("../schemas/heroSection.schema.js");
+const { PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -49,4 +49,4 @@ router.delete(
   deleteHeroSection
 );
 
-export default router;
+module.exports = router;

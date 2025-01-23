@@ -1,9 +1,9 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { Innovation } from "../../models/innovation.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { Innovation } = require("../../models/innovation.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
 
 const createInnovation = asyncHandler(async (req, res) => {
     const existingInnovation = await Innovation.findOne();
@@ -62,4 +62,4 @@ const deleteInnovation = asyncHandler(async (req, res) => {
     sendResponse(res, STATUS_CODES.SUCCESS, null, "Innovation deleted successfully");
 });
 
-export { createInnovation, getInnovations, getInnovationById, updateInnovation, deleteInnovation };
+module.exports = { createInnovation, getInnovations, getInnovationById, updateInnovation, deleteInnovation };

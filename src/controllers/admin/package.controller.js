@@ -1,13 +1,13 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { PackageModel } from "../../models/package.model.js";
-import { Service } from "../../models/service.model.js"; // Import the Service model
-import ApiResponse from "../../utils/ApiResponse.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import sendResponse from "../../utils/responseHandler.js";
-import mongoose from 'mongoose';
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { PackageModel } = require("../../models/package.model.js");
+const { Service } = require("../../models/service.model.js");
+const ApiResponse = require("../../utils/ApiResponse.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const mongoose = require('mongoose');
 
 const createPackageController = asyncHandler(async (req, res) => {
   const { name, price, description, features, serviceId } = req.body;
@@ -104,7 +104,7 @@ const deletePackageController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Package"));
 });
 
-export {
+module.exports = {
   createPackageController,
   getAllPackagesController,
   getPackageByIdController,

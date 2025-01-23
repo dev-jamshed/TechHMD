@@ -1,10 +1,11 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { HeroSection } from "../../models/heroSection.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { HeroSection } = require("../../models/heroSection.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 const saveHeroSection = async (req, res, existingHeroSection = null) => {
   const { title, description } = req.body;
@@ -36,25 +37,25 @@ const saveHeroSection = async (req, res, existingHeroSection = null) => {
 };
 
 // POST: Create Hero Section
-export const createHeroSection = asyncHandler(async (req, res) => {
+const createHeroSection = asyncHandler(async (req, res) => {
   return saveHeroSection(req, res);
 });
 
 // GET: Fetch all Hero Sections
-export const getHeroSections = asyncHandler(async (req, res) => {
+const getHeroSections = asyncHandler(async (req, res) => {
   const heroSections = await HeroSection.find();
   sendResponse(res, STATUS_CODES.SUCCESS, heroSections, "Hero Sections fetched successfully");
 });
 
 // GET: Fetch single Hero Section by title
-export const getHeroSectionByTitle = asyncHandler(async (req, res) => {
+const getHeroSectionByTitle = asyncHandler(async (req, res) => {
   const { title } = req.params;
   const heroSection = await HeroSection.findOne({ title });
   checkNotFound("Hero Section", heroSection);
   sendResponse(res, STATUS_CODES.SUCCESS, heroSection, "Hero Section fetched successfully");
 });
 
-export const getHeroSectionByPageOrService = asyncHandler(async (req, res) => {
+const getHeroSectionByPageOrService = asyncHandler(async (req, res) => {
   const { pageName, serviceId } = req.query;
   const query = {};
   if (!pageName && !serviceId) {
@@ -73,7 +74,7 @@ export const getHeroSectionByPageOrService = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Hero Section by ID
-export const updateHeroSection = asyncHandler(async (req, res) => {
+const updateHeroSection = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const heroSection = await HeroSection.findById(id);
   checkNotFound("Hero Section", heroSection);
@@ -81,7 +82,7 @@ export const updateHeroSection = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Hero Section by ID
-export const deleteHeroSection = asyncHandler(async (req, res) => {
+const deleteHeroSection = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const heroSection = await HeroSection.findByIdAndDelete(id);
   checkNotFound("Hero Section", heroSection);
@@ -93,3 +94,12 @@ export const deleteHeroSection = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, heroSection, DELETE_SUCCESS("Hero Section"));
 });
+
+module.exports = {
+  createHeroSection,
+  getHeroSections,
+  getHeroSectionByTitle,
+  getHeroSectionByPageOrService,
+  updateHeroSection,
+  deleteHeroSection
+};

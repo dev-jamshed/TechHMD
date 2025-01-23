@@ -1,13 +1,13 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { User } from "../../models/user.model.js";
-import uploadOnServer from "../../utils/cloudinary.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import { generateJwtToken } from "../../utils/auth.js";
-import bcrypt from "bcrypt";
-import { ACCESS_TOKEN, PRODUCTION } from "../../utils/constants/global.js";
-import { INVALID_CREDENTIALS, LOGIN_SUCCESS, LOGOUT_SUCCESS, CREATE_SUCCESS } from "../../utils/constants/message.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { User } = require("../../models/user.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const ApiResponse = require("../../utils/ApiResponse.js");
+const { generateJwtToken } = require("../../utils/auth.js");
+const bcrypt = require("bcrypt");
+const { ACCESS_TOKEN, PRODUCTION } = require("../../utils/constants/global.js");
+const { INVALID_CREDENTIALS, LOGIN_SUCCESS, LOGOUT_SUCCESS, CREATE_SUCCESS } = require("../../utils/constants/message.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
 
 const saltRounds = Number(process.env.SALTROUNDS);
 
@@ -94,4 +94,4 @@ const getAdmin = asyncHandler(async (req, res) => {
   )
 })
 
-export { registerController, loginController, getAdmin, logout }
+module.exports = { registerController, loginController, getAdmin, logout }

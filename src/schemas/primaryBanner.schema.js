@@ -1,7 +1,9 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const primaryBannerSchema = z.object({
+const primaryBannerSchema = z.object({
     title: z.string(),
     description: z.string(),
     pageName: z.string(),
 });
+
+module.exports = { primaryBannerSchema };

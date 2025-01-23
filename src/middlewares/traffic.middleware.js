@@ -1,8 +1,8 @@
-import Traffic from '../models/traffic.model.js';
-import geoip from 'geoip-lite';
-import asyncHandler from '../utils/asyncHandler.js';
+const Traffic = require('../models/traffic.model.js');
+const geoip = require('geoip-lite');
+const asyncHandler = require('../utils/asyncHandler.js');
 
-export const captureTraffic = asyncHandler(async (req, res, next) => {
+const captureTraffic = asyncHandler(async (req, res, next) => {
   if (req.method !== 'GET' || req.originalUrl.includes('/traffic')) {
     return next();
   }
@@ -22,3 +22,5 @@ export const captureTraffic = asyncHandler(async (req, res, next) => {
   await trafficData.save();
   next();
 });
+
+module.exports = { captureTraffic };

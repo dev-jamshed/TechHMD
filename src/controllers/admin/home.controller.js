@@ -1,13 +1,14 @@
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { HomeModel } from "../../models/home.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { UPDATE_SUCCESS } from "../../utils/constants/message.js";
-import ApiResponse from "../../utils/ApiResponse.js";
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { HomeModel } = require("../../models/home.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { UPDATE_SUCCESS } = require("../../utils/constants/message.js");
+const ApiResponse = require("../../utils/ApiResponse.js");
 
-export const createOrUpdateHomeController = asyncHandler(async (req, res) => {
+const createOrUpdateHomeController = asyncHandler(async (req, res) => {
   const { heading, description } = req.body;
 
   // Check if the home section exists
@@ -32,7 +33,7 @@ export const createOrUpdateHomeController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, home, UPDATE_SUCCESS("Home section"));
 });
 
-export const getHomeController = asyncHandler(async (req, res) => {
+const getHomeController = asyncHandler(async (req, res) => {
   const home = await HomeModel.findOne();
 
   if (!home) {
@@ -43,3 +44,8 @@ export const getHomeController = asyncHandler(async (req, res) => {
     new ApiResponse(STATUS_CODES.SUCCESS, home, "Home section fetched successfully")
   );
 });
+
+module.exports = {
+  createOrUpdateHomeController,
+  getHomeController
+};

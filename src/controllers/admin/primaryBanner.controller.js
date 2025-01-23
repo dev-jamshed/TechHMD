@@ -1,10 +1,11 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { PrimaryBanner } from "../../models/primaryBanner.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import uploadOnServer ,{deleteImageFromServer} from "../../utils/cloudinary.js";
-import sendResponse from "../../utils/responseHandler.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { PrimaryBanner } = require("../../models/primaryBanner.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const sendResponse = require("../../utils/responseHandler.js");
 
 const createPrimaryBanner = asyncHandler(async (req, res) => {
     const { title, description, pageName } = req.body;
@@ -87,4 +88,10 @@ const deletePrimaryBanner = asyncHandler(async (req, res) => {
     sendResponse(res, STATUS_CODES.SUCCESS, null, "Primary Banner deleted successfully");
 });
 
-export { createPrimaryBanner, getPrimaryBanners, getPrimaryBannerById, updatePrimaryBanner, deletePrimaryBanner };
+module.exports = {
+    createPrimaryBanner,
+    getPrimaryBanners,
+    getPrimaryBannerById,
+    updatePrimaryBanner,
+    deletePrimaryBanner
+};

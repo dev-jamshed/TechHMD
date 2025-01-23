@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
   pageName: {
@@ -26,4 +26,5 @@ const schema = new mongoose.Schema({
   timestamps: true
 });
 
-export const PageMetaTags = mongoose.model('PageMetaTags', schema);
+const PageMetaTags = mongoose.model('PageMetaTags', schema);
+module.exports = { PageMetaTags };

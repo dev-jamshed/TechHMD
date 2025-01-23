@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const primaryBannerSchema = new mongoose.Schema({
     title: {
@@ -28,4 +28,5 @@ const primaryBannerSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const PrimaryBanner = mongoose.model('PrimaryBanner', primaryBannerSchema);
+const PrimaryBanner = mongoose.model('PrimaryBanner', primaryBannerSchema);
+module.exports = { PrimaryBanner };

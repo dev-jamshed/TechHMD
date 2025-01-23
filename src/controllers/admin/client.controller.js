@@ -1,14 +1,15 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { Client } from "../../models/client.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { Client } = require("../../models/client.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // POST: Create Client
-export const createClient = asyncHandler(async (req, res) => {
+const createClient = asyncHandler(async (req, res) => {
     const { name, description, website_url, is_featured } = req.body;
     let logo;
     const logoLocalPath = req.file?.path;
@@ -32,14 +33,14 @@ export const createClient = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Clients
-export const getClients = asyncHandler(async (req, res) => {
+const getClients = asyncHandler(async (req, res) => {
     const clients = await Client.find();
     checkNotFound("Clients", clients);
     sendResponse(res, STATUS_CODES.SUCCESS, clients, "Clients fetched successfully");
 });
 
 // GET: Fetch single Client by ID
-export const getClientById = asyncHandler(async (req, res) => {
+const getClientById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const client = await Client.findById(id);
     checkNotFound("Client", client);
@@ -47,7 +48,7 @@ export const getClientById = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Client by ID
-export const updateClient = asyncHandler(async (req, res) => {
+const updateClient = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { name, description, website_url, is_featured } = req.body;
     let logo;
@@ -69,7 +70,7 @@ export const updateClient = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Client by ID
-export const deleteClient = asyncHandler(async (req, res) => {
+const deleteClient = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const client = await Client.findByIdAndDelete(id);
     checkNotFound("Client", client);
@@ -78,3 +79,11 @@ export const deleteClient = asyncHandler(async (req, res) => {
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Client"));
 });
+
+module.exports = {
+    createClient,
+    getClients,
+    getClientById,
+    updateClient,
+    deleteClient
+};

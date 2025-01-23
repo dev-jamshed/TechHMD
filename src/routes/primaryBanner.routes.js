@@ -1,16 +1,16 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createPrimaryBanner,
     getPrimaryBanners,
     getPrimaryBannerById,
     updatePrimaryBanner,
     deletePrimaryBanner
-} from "../controllers/admin/primaryBanner.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { primaryBannerSchema } from "../schemas/primaryBanner.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
-import { upload } from "../middlewares/multer.middleware.js";
+} = require("../controllers/admin/primaryBanner.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { primaryBannerSchema } = require("../schemas/primaryBanner.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
+const { upload } = require("../middlewares/multer.middleware.js");
 
 const router = express.Router();
 
@@ -36,4 +36,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, validateRequest(primaryBannerSchema.pick({ id: true }), PARAM), deletePrimaryBanner);
 
-export default router;
+module.exports = router;

@@ -1,16 +1,16 @@
-import express from "express";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { inquirySchema } from "../schemas/inquiry.schema.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM } from "../utils/constants/global.js";
+const express = require("express");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { inquirySchema } = require("../schemas/inquiry.schema.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM } = require("../utils/constants/global.js");
 
-import {
+const {
   createInquiryController,
   getAllInquiriesController,
   getInquiryByIdController,
   deleteInquiryController,
-} from "../controllers/admin/inquiry.controller.js";
+} = require("../controllers/admin/inquiry.controller.js");
 
 const router = express.Router();
 
@@ -20,4 +20,4 @@ router.get("/", verifyJwt, getAllInquiriesController);
 router.get("/:id", verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), getInquiryByIdController);
 router.delete("/:id", verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteInquiryController);
 
-export default router;
+module.exports = router;

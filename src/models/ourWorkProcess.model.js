@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const ourWorkProcessSchema = new mongoose.Schema({
   serviceId: {
@@ -22,4 +22,5 @@ const ourWorkProcessSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export const OurWorkProcess = mongoose.model('OurWorkProcess', ourWorkProcessSchema);
+const OurWorkProcess = mongoose.model('OurWorkProcess', ourWorkProcessSchema);
+module.exports = { OurWorkProcess };

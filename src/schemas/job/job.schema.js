@@ -1,6 +1,6 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const jobSchema = z.object({
+const jobSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title must be at most 100 characters"),
     description: z.string().min(10, "Description must be at least 10 characters"),
     requirements: z.array(z.string()).nonempty("Requirements are required"),
@@ -15,3 +15,5 @@ export const jobSchema = z.object({
         return Boolean(val); // This ensures it works for boolean values as well
     }),
 });
+
+module.exports = { jobSchema };

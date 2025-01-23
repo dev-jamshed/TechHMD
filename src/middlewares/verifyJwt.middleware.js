@@ -1,8 +1,8 @@
-import { verifyJwtToken } from "../utils/auth.js";
-import ApiError from "../utils/ApiError.js";
-import { PRODUCTION } from '../utils/constants/global.js'; // Assuming PRODUCTION is defined
+const { verifyJwtToken } = require("../utils/auth.js");
+const ApiError = require("../utils/ApiError.js");
+const { PRODUCTION } = require('../utils/constants/global.js');
 
-export const verifyJwt = (req, res, next) => {
+const verifyJwt = (req, res, next) => {
   if (process.env.ENV !== PRODUCTION) {
     return next();
   }
@@ -20,4 +20,5 @@ export const verifyJwt = (req, res, next) => {
     next(error);
   }
 };
-  
+
+module.exports = { verifyJwt };

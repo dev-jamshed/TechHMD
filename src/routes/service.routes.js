@@ -1,11 +1,11 @@
-import express from 'express';
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { serviceSchema, slugSchema } from "../schemas/service.schema.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
-import {
+const express = require('express');
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { serviceSchema, slugSchema } = require("../schemas/service.schema.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
+const {
   createServiceController,
   getAllServicesController,
   getServiceBySlugController,
@@ -13,7 +13,7 @@ import {
   deleteServiceController,
   getSubServices,
   getParentServices
-} from '../controllers/admin/service.controller.js';
+} = require('../controllers/admin/service.controller.js');
 
 const router = express.Router();
 
@@ -25,4 +25,4 @@ router.get('/:slug', validateRequest(slugSchema, PARAM), getServiceBySlugControl
 router.put('/:slug', verifyJwt, upload.single('logo'), validateRequest({ ...slugSchema, ...serviceSchema }, PARAM_AND_BODY), updateServiceController);
 router.delete('/:slug', verifyJwt, validateRequest(slugSchema, PARAM), deleteServiceController);
 
-export default router;
+module.exports = router;

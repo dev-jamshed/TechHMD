@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const aboutOurWorkProcessSchema = new mongoose.Schema({
   icon: {
@@ -17,4 +17,5 @@ const aboutOurWorkProcessSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export const AboutOurWorkProcess = mongoose.model('AboutOurWorkProcess', aboutOurWorkProcessSchema);
+const AboutOurWorkProcess = mongoose.model('AboutOurWorkProcess', aboutOurWorkProcessSchema);
+module.exports = { AboutOurWorkProcess };

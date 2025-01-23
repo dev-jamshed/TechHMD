@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const coreValueSchema = new mongoose.Schema({
   image: {
@@ -17,4 +17,5 @@ const coreValueSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export const CoreValue = mongoose.model('CoreValue', coreValueSchema);
+const CoreValue = mongoose.model('CoreValue', coreValueSchema);
+module.exports = { CoreValue };

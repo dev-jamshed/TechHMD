@@ -1,12 +1,12 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   getCompanyDetailController,
   createCompanyDetailController,
   updateCompanyDetailController,
-} from "../controllers/admin/companyDetail.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { companyDetailSchema } from "../schemas/companyDetail.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
+} = require("../controllers/admin/companyDetail.controller.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { companyDetailSchema } = require("../schemas/companyDetail.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
 
 const router = express.Router();
 
@@ -24,4 +24,4 @@ router.put("/", upload.fields([
   { name: 'ogImage', maxCount: 1 }
 ]), validateRequest(companyDetailSchema, null, ["seo", "socialMedia"]), updateCompanyDetailController);
 
-export default router;
+module.exports = router;

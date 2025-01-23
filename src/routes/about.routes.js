@@ -1,10 +1,10 @@
-import express from "express";
-import { getAboutController, createAboutController, updateAboutController, deleteAboutController } from "../controllers/admin/about.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { aboutSchema } from "../schemas/about.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM_AND_BODY } from "../utils/constants/global.js";
+const express = require("express");
+const { getAboutController, createAboutController, updateAboutController, deleteAboutController } = require("../controllers/admin/about.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { aboutSchema } = require("../schemas/about.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -18,10 +18,8 @@ router.post(
   createAboutController
 );
 
-
 router.put(
   "/",
-
   verifyJwt,
   upload.single("media"),
   validateRequest(aboutSchema, PARAM_AND_BODY),
@@ -30,6 +28,4 @@ router.put(
 
 router.delete("/:type", verifyJwt, deleteAboutController);
 
-
-
-export default router;
+module.exports = router;

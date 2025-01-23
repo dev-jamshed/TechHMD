@@ -1,15 +1,19 @@
-import mongoose from 'mongoose'
-import { CONNECTION_ESTABLISHED, CONNECTION_ERROR } from '../../utils/constants/message.js'
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-let dbConnect = async (establishedBy) => {
-    mongoose.connect(process.env.MONGO_URI)
-        .then(() => {
-            console.log(`--> MongoDB ${CONNECTION_ESTABLISHED} ${establishedBy}`)
-        })
-        .catch(e => {
-            console.log(`--> ${CONNECTION_ERROR} \n Message: ${e.message} \n Code: ${e.code}`)
-        })
-    return false
-}
+dotenv.config();
 
-export default dbConnect
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('MongoDB connected');
+    } catch (error) {
+        console.error('MongoDB connection failed:', error.message);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;

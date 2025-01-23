@@ -1,15 +1,15 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createPageMetaTags,
     getPageMetaTags,
     getPageMetaTagsByPageName,
     updatePageMetaTags,
     deletePageMetaTags
-} from "../controllers/admin/pageMetaTags.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { pageMetaTagsSchema } from "../schemas/pageMetaTags.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+} = require("../controllers/admin/pageMetaTags.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { pageMetaTagsSchema } = require("../schemas/pageMetaTags.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.put(
 
 router.delete("/:pageName", verifyJwt, validateRequest(pageMetaTagsSchema.pick({ pageName: true }), PARAM), deletePageMetaTags);
 
-export default router;
+module.exports = router;

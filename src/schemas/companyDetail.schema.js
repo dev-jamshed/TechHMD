@@ -1,6 +1,6 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const companyDetailSchema = z.object({
+const companyDetailSchema = z.object({
   name: z.string({ required_error: "Name is required" }).min(1, "Name cannot be empty"),
   slogan: z.string({ required_error: "Slogan is required" }).min(1, "Slogan cannot be empty").optional(),
   sloganDescription: z.string({ required_error: "Slogan Description is required" }).min(1, "Slogan Description cannot be empty").optional(),
@@ -27,3 +27,5 @@ export const companyDetailSchema = z.object({
   sitemap: z.string().optional(),
   robotsTxt: z.string().optional(),
 });
+
+module.exports = { companyDetailSchema };

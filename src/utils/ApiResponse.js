@@ -1,17 +1,17 @@
 class ApiResponse {
     constructor(
-        statusCode ,
+        statusCode,
         data,
         message = "Something went wrong",
         success
     ){
-        this.statusCode = statusCode
+        this.statusCode = statusCode;
         if(data){
-            this.data = data
+            this.data = data;
         }
-        this.message = message,
-        this.success = success
+        this.message = message;
+        this.success = success;
     }
 }
 
-export default ApiResponse
+module.exports = ApiResponse;

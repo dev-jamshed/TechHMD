@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const heroSectionSchema = new mongoose.Schema(
   {
@@ -13,4 +13,5 @@ const heroSectionSchema = new mongoose.Schema(
   { timestamps: true } 
 );
 
-export const HeroSection = mongoose.model('HeroSection', heroSectionSchema);
+const HeroSection = mongoose.model('HeroSection', heroSectionSchema);
+module.exports = { HeroSection };

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const privacyPolicySchema = new mongoose.Schema({
     title: {
@@ -18,4 +18,5 @@ const privacyPolicySchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const PrivacyPolicy = mongoose.model('PrivacyPolicy', privacyPolicySchema);
+const PrivacyPolicy = mongoose.model('PrivacyPolicy', privacyPolicySchema);
+module.exports = { PrivacyPolicy };

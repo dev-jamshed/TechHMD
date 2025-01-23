@@ -18,8 +18,6 @@ class ApiError extends Error {
         //     Error.captureStackTrace(this, this.constructor); // Yeh sahi hai
         // }
     }
-
-   
 }
 
-export default ApiError;
+module.exports = ApiError;

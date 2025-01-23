@@ -1,6 +1,6 @@
-import { CompanyDetailModel } from '../models/companyDetail.model.js';
+const { CompanyDetailModel } = require('../models/companyDetail.model.js');
 
-export const createEmptySitemap = async () => {
+const createEmptySitemap = async () => {
     try {
         const companyDetail = await CompanyDetailModel.findOne();
         if (!companyDetail) {
@@ -19,7 +19,7 @@ export const createEmptySitemap = async () => {
     }
 };
 
-export const addServiceToSitemap = async (serviceSlug) => {
+const addServiceToSitemap = async (serviceSlug) => {
     try {
         const companyDetail = await CompanyDetailModel.findOne();
         if (!companyDetail) {
@@ -39,12 +39,12 @@ export const addServiceToSitemap = async (serviceSlug) => {
         await companyDetail.save();
         return companyDetail.sitemap;
     } catch (error) {
-        console.log("Failed to update sitemap",error)
+        console.log("Failed to update sitemap", error);
         throw new Error('Failed to update sitemap');
     }
 };
 
-export const updateServiceInSitemap = async (oldSlug, newSlug) => {
+const updateServiceInSitemap = async (oldSlug, newSlug) => {
     try {
         const companyDetail = await CompanyDetailModel.findOne();
         if (!companyDetail) {
@@ -76,4 +76,10 @@ export const updateServiceInSitemap = async (oldSlug, newSlug) => {
         console.error('Failed to update sitemap ❌', error);
         throw new Error('Failed to update sitemap');
     }
+};
+
+module.exports = {
+    createEmptySitemap,
+    addServiceToSitemap,
+    updateServiceInSitemap
 };

@@ -1,10 +1,10 @@
-import express from "express";
-import { createComment, deleteComment, getComment, getComments, getPostComments, updateComment } from "../controllers/admin/comment.controller.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { commentSchema } from "../schemas/blog/comment.schema.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+const express = require("express");
+const { createComment, deleteComment, getComment, getComments, getPostComments, updateComment } = require("../controllers/admin/comment.controller.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { commentSchema } = require("../schemas/blog/comment.schema.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get('/:postId', validateRequest(ZodWrapper({ postId: ValidMongoId }), PAR
 router.put('/:id', verifyJwt, validateRequest({ ...ZodWrapper({ id: ValidMongoId }), ...commentSchema }, PARAM_AND_BODY), updateComment);
 router.delete('/:id', verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteComment);
 
-export default router;
+module.exports = router;

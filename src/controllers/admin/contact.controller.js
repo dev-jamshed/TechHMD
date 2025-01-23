@@ -1,12 +1,12 @@
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import asyncHandler from "../../utils/asyncHandler.js";
-import { ContactModel } from "../../models/contact.model.js"; 
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { ContactModel } = require("../../models/contact.model.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // Create a new Contact
-export const createContactController = asyncHandler(async (req, res) => {
+const createContactController = asyncHandler(async (req, res) => {
   const { name, email, subject, message, phone } = req.body; 
   const contact = await ContactModel.create({
     name,
@@ -24,7 +24,7 @@ export const createContactController = asyncHandler(async (req, res) => {
 });
 
 // Get all Contacts
-export const getAllContactsController = asyncHandler(async (req, res) => {
+const getAllContactsController = asyncHandler(async (req, res) => {
   const contacts = await ContactModel.find();
   
   checkNotFound("contacts", contacts);
@@ -33,7 +33,7 @@ export const getAllContactsController = asyncHandler(async (req, res) => {
 });
 
 // Get a single Contact by ID
-export const getContactByIdController = asyncHandler(async (req, res) => {
+const getContactByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const contact = await ContactModel.findById(id);
@@ -44,7 +44,7 @@ export const getContactByIdController = asyncHandler(async (req, res) => {
 });
 
 // Delete a Contact
-export const deleteContactController = asyncHandler(async (req, res) => {
+const deleteContactController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const deletedContact = await ContactModel.findByIdAndDelete(id);
@@ -53,3 +53,10 @@ export const deleteContactController = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Contact"));
 });
+
+module.exports = {
+  createContactController,
+  getAllContactsController,
+  getContactByIdController,
+  deleteContactController
+};

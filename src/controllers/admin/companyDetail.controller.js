@@ -1,11 +1,12 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { CompanyDetailModel } from "../../models/companyDetail.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { CompanyDetailModel } = require("../../models/companyDetail.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS } = require("../../utils/constants/message.js");
 
 const createCompanyDetailController = asyncHandler(async (req, res) => {
   const {
@@ -144,7 +145,7 @@ const updateCompanyDetailController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, companyDetail, UPDATE_SUCCESS("Company Detail"));
 });
 
-export {
+module.exports = {
   createCompanyDetailController,
   getCompanyDetailController,
   updateCompanyDetailController,

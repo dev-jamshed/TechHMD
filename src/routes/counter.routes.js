@@ -1,15 +1,15 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createCounter,
     getCounters,
     getCounterById,
     updateCounter,
     deleteCounter
-} from "../controllers/admin/counter.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { counterSchema } from "../schemas/counter.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+} = require("../controllers/admin/counter.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { counterSchema } = require("../schemas/counter.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, validateRequest(counterSchema.pick({ id: true }), PARAM), deleteCounter);
 
-export default router;
+module.exports = router;

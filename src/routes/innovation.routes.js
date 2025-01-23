@@ -1,15 +1,15 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createInnovation,
     getInnovations,
     getInnovationById,
     updateInnovation,
     deleteInnovation
-} from "../controllers/admin/innovation.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { innovationSchema } from "../schemas/innovation.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+} = require("../controllers/admin/innovation.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { innovationSchema } = require("../schemas/innovation.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, validateRequest(innovationSchema.pick({ id: true }), PARAM), deleteInnovation);
 
-export default router;
+module.exports = router;

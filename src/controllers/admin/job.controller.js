@@ -1,12 +1,12 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { Job } from "../../models/job.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { Job } = require("../../models/job.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // POST: Create Job
-export const createJob = asyncHandler(async (req, res) => {
+const createJob = asyncHandler(async (req, res) => {
     const { title, description, requirements, location, is_active } = req.body;
 
     const job = await Job.create({ title, description, requirements, location, is_active });
@@ -14,14 +14,14 @@ export const createJob = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Jobs
-export const getJobs = asyncHandler(async (req, res) => {
+const getJobs = asyncHandler(async (req, res) => {
     const jobs = await Job.find();
     checkNotFound("Jobs", jobs);
     sendResponse(res, STATUS_CODES.SUCCESS, jobs, "Jobs fetched successfully");
 });
 
 // GET: Fetch single Job by ID
-export const getJobById = asyncHandler(async (req, res) => {
+const getJobById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const job = await Job.findById(id);
     checkNotFound("Job", job);
@@ -29,7 +29,7 @@ export const getJobById = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Job by ID
-export const updateJob = asyncHandler(async (req, res) => {
+const updateJob = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { title, description, requirements, location, is_active } = req.body;
 
@@ -40,9 +40,17 @@ export const updateJob = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Job by ID
-export const deleteJob = asyncHandler(async (req, res) => {
+const deleteJob = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const job = await Job.findByIdAndDelete(id);
     checkNotFound("Job", job);
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Job"));
 });
+
+module.exports = {
+    createJob,
+    getJobs,
+    getJobById,
+    updateJob,
+    deleteJob
+};

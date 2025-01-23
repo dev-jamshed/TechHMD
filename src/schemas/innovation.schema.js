@@ -1,4 +1,4 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
 const innovationItemSchema = z.object({
     icon: z.string().url(),
@@ -6,9 +6,11 @@ const innovationItemSchema = z.object({
     description: z.string(),
 });
 
-export const innovationSchema = z.object({
+const innovationSchema = z.object({
     title_1: z.string().optional(),
     title_2: z.string(),
     description: z.string(),
     innovations: z.array(innovationItemSchema),
 });
+
+module.exports = { innovationSchema };

@@ -1,13 +1,14 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { PrivacyPolicy } from "../../models/privacyPolicy.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { PrivacyPolicy } = require("../../models/privacyPolicy.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // POST: Create Privacy Policy
-export const createPrivacyPolicy = asyncHandler(async (req, res) => {
+const createPrivacyPolicy = asyncHandler(async (req, res) => {
     const { title, content } = req.body;
     let image;
     const imageLocalPath = req.file?.path;
@@ -22,28 +23,28 @@ export const createPrivacyPolicy = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Privacy Policies
-export const getPrivacyPolicies = asyncHandler(async (req, res) => {
+const getPrivacyPolicies = asyncHandler(async (req, res) => {
     const privacyPolicies = await PrivacyPolicy.find();
     checkNotFound("Privacy Policies", privacyPolicies);
     sendResponse(res, STATUS_CODES.SUCCESS, privacyPolicies, "Privacy Policies fetched successfully");
 });
 
 // GET: Fetch single Privacy Policy by ID
-export const getPrivacyPolicyById = asyncHandler(async (req, res) => {
+const getPrivacyPolicyById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const privacyPolicy = await PrivacyPolicy.findById(id);
     checkNotFound("Privacy Policy", privacyPolicy);
     sendResponse(res, STATUS_CODES.SUCCESS, privacyPolicy, "Privacy Policy fetched successfully");
 });
 
-export const getDefaultPrivacyPolicy = asyncHandler(async (req, res) => {
-        const privacyPolicy = await PrivacyPolicy.find().sort({ createdAt: -1 }).limit(1);
-        checkNotFound("Privacy Policy", privacyPolicy);
-        sendResponse(res, STATUS_CODES.SUCCESS, privacyPolicy[0], "Default Privacy Policy fetched successfully");
+const getDefaultPrivacyPolicy = asyncHandler(async (req, res) => {
+    const privacyPolicy = await PrivacyPolicy.find().sort({ createdAt: -1 }).limit(1);
+    checkNotFound("Privacy Policy", privacyPolicy);
+    sendResponse(res, STATUS_CODES.SUCCESS, privacyPolicy[0], "Default Privacy Policy fetched successfully");
 });
 
 // PUT: Update Privacy Policy by ID
-export const updatePrivacyPolicy = asyncHandler(async (req, res) => {
+const updatePrivacyPolicy = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
 
@@ -70,7 +71,7 @@ export const updatePrivacyPolicy = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Privacy Policy by ID
-export const deletePrivacyPolicy = asyncHandler(async (req, res) => {
+const deletePrivacyPolicy = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const privacyPolicy = await PrivacyPolicy.findByIdAndDelete(id);
     checkNotFound("Privacy Policy", privacyPolicy);
@@ -79,3 +80,12 @@ export const deletePrivacyPolicy = asyncHandler(async (req, res) => {
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Privacy Policy"));
 });
+
+module.exports = {
+    createPrivacyPolicy,
+    getPrivacyPolicies,
+    getPrivacyPolicyById,
+    getDefaultPrivacyPolicy,
+    updatePrivacyPolicy,
+    deletePrivacyPolicy
+};

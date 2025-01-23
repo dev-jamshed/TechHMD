@@ -1,21 +1,20 @@
-import {model,Schema} from "mongoose";
+const { model, Schema } = require("mongoose");
 
-
-const schema =  new Schema(
+const schema = new Schema(
     {
-        name:{
-            type : String,
-            required : true,
+        name: {
+            type: String,
+            required: true,
         },
-        email:{
-            type : String,
-            required : true,
-            unique : true,
-            lowercase : true,
-            trim : true,
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
         },
-        avatar : {
-            type : String,
+        avatar: {
+            type: String,
         },
         password: {
             type: String,
@@ -24,9 +23,10 @@ const schema =  new Schema(
         refreshToken: {
             type: String
         }
-    },{
-        timestamps : true
+    }, {
+        timestamps: true
     }
 );
 
-export const User = model("User",schema);
+const User = model("User", schema);
+module.exports = { User };

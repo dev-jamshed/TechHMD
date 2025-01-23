@@ -1,8 +1,8 @@
 {
   "name": "chaiaurcode",
   "version": "1.0.0",
-  "type": "module",
-  "main": "src/index.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
     "start": "node  -r dotenv/config --experimental-json-modules server.js",
     "dev": "nodemon -r dotenv/config --experimental-json-modules server.js"
@@ -13,7 +13,6 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "nodemon": "^3.1.7",
     "prettier": "^3.4.1"

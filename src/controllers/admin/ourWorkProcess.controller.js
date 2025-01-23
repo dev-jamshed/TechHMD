@@ -1,15 +1,16 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { OurWorkProcess } from "../../models/ourWorkProcess.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import ApiError from "../../utils/ApiError.js";
-import { Types } from "mongoose";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { OurWorkProcess } = require("../../models/ourWorkProcess.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const ApiError = require("../../utils/ApiError.js");
+const { Types } = require("mongoose");
 
 // POST: Create Our Work Process
-export const createOurWorkProcess = asyncHandler(async (req, res) => {
+const createOurWorkProcess = asyncHandler(async (req, res) => {
     const { serviceId, title, description } = req.body;
 
     let icon;
@@ -23,14 +24,14 @@ export const createOurWorkProcess = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Our Work Processes
-export const getOurWorkProcesses = asyncHandler(async (req, res) => {
+const getOurWorkProcesses = asyncHandler(async (req, res) => {
     const ourWorkProcesses = await OurWorkProcess.find()
     checkNotFound("Our Work Process", ourWorkProcesses);
     sendResponse(res, STATUS_CODES.SUCCESS, ourWorkProcesses, "Our Work Processes fetched successfully");
 });
 
 // GET: Fetch single Our Work Process by serviceId
-export const getOurWorkProcessByServiceId = asyncHandler(async (req, res) => {
+const getOurWorkProcessByServiceId = asyncHandler(async (req, res) => {
     const { serviceId } = req.params;
     const ourWorkProcess = await OurWorkProcess.aggregate([
         {
@@ -50,7 +51,7 @@ export const getOurWorkProcessByServiceId = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Our Work Process by ID
-export const updateOurWorkProcess = asyncHandler(async (req, res) => {
+const updateOurWorkProcess = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { serviceId, title, description } = req.body;
 
@@ -79,9 +80,17 @@ export const updateOurWorkProcess = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Our Work Process by ID
-export const deleteOurWorkProcess = asyncHandler(async (req, res) => {
+const deleteOurWorkProcess = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const ourWorkProcess = await OurWorkProcess.findByIdAndDelete(id);
     checkNotFound("Our Work Process", ourWorkProcess);
     sendResponse(res, STATUS_CODES.SUCCESS, ourWorkProcess, DELETE_SUCCESS("Our Work Process"));
 });
+
+module.exports = {
+    createOurWorkProcess,
+    getOurWorkProcesses,
+    getOurWorkProcessByServiceId,
+    updateOurWorkProcess,
+    deleteOurWorkProcess
+};

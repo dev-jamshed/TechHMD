@@ -1,13 +1,13 @@
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { InquiryModel } from "../../models/inquiry.model.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import { Types } from "mongoose";
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { InquiryModel } = require("../../models/inquiry.model.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const { Types } = require("mongoose");
 
-export const createInquiryController = asyncHandler(async (req, res) => {
+const createInquiryController = asyncHandler(async (req, res) => {
   const { name, email, subject, message, serviceId, packageId } = req.body;
 
   const inquiry = await InquiryModel.create({
@@ -26,7 +26,7 @@ export const createInquiryController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.CREATED, inquiry, CREATE_SUCCESS("Inquiry"));
 });
 
-export const getAllInquiriesController = asyncHandler(async (req, res) => {
+const getAllInquiriesController = asyncHandler(async (req, res) => {
   const inquiries = await InquiryModel.find().populate("ServiceId");
 
   checkNotFound("inquiries", inquiries);
@@ -34,7 +34,7 @@ export const getAllInquiriesController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, inquiries, "Inquiries fetched successfully");
 });
 
-export const getInquiryByIdController = asyncHandler(async (req, res) => {
+const getInquiryByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const inquiry = await InquiryModel.findById(id).populate("ServiceId");
 
@@ -43,7 +43,7 @@ export const getInquiryByIdController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, inquiry, "Inquiry fetched successfully");
 });
 
-export const deleteInquiryController = asyncHandler(async (req, res) => {
+const deleteInquiryController = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const deletedInquiry = await InquiryModel.findByIdAndDelete(id);
 
@@ -51,3 +51,10 @@ export const deleteInquiryController = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Inquiry"));
 });
+
+module.exports = {
+  createInquiryController,
+  getAllInquiriesController,
+  getInquiryByIdController,
+  deleteInquiryController
+};

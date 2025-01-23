@@ -1,14 +1,15 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { Partner } from "../../models/partner.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { Partner } = require("../../models/partner.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // POST: Create Partner
-export const createPartner = asyncHandler(async (req, res) => {
+const createPartner = asyncHandler(async (req, res) => {
     const { name, description, website_url, is_featured } = req.body;
     let logo;
     const logoLocalPath = req.file?.path;
@@ -30,14 +31,14 @@ export const createPartner = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Partners
-export const getPartners = asyncHandler(async (req, res) => {
+const getPartners = asyncHandler(async (req, res) => {
     const partners = await Partner.find();
     checkNotFound("Partners", partners);
     sendResponse(res, STATUS_CODES.SUCCESS, partners, "Partners fetched successfully");
 });
 
 // GET: Fetch single Partner by ID
-export const getPartnerById = asyncHandler(async (req, res) => {
+const getPartnerById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const partner = await Partner.findById(id);
     checkNotFound("Partner", partner);
@@ -45,7 +46,7 @@ export const getPartnerById = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Partner by ID
-export const updatePartner = asyncHandler(async (req, res) => {
+const updatePartner = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { name, description, website_url, is_featured } = req.body;
 
@@ -72,7 +73,7 @@ export const updatePartner = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Partner by ID
-export const deletePartner = asyncHandler(async (req, res) => {
+const deletePartner = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const partner = await Partner.findByIdAndDelete(id);
     checkNotFound("Partner", partner);
@@ -81,3 +82,11 @@ export const deletePartner = asyncHandler(async (req, res) => {
     }
     sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Partner"));
 });
+
+module.exports = {
+    createPartner,
+    getPartners,
+    getPartnerById,
+    updatePartner,
+    deletePartner
+};

@@ -1,12 +1,13 @@
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import asyncHandler from "../../utils/asyncHandler.js";
-import { AboutModel } from "../../models/about.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import checkNotFound from "../../utils/checkNotFound.js";
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { AboutModel } = require("../../models/about.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
 
-export const createAboutController = asyncHandler(async (req, res) => {
+const createAboutController = asyncHandler(async (req, res) => {
   const { heading, description, pageName, serviceId } = req.body;
 
   let media;
@@ -21,7 +22,7 @@ export const createAboutController = asyncHandler(async (req, res) => {
 });
 
 
-export const getAboutController = asyncHandler(async (req, res) => {
+const getAboutController = asyncHandler(async (req, res) => {
   const { pageName, serviceId } = req.query;
 
   let query = {}
@@ -35,7 +36,7 @@ export const getAboutController = asyncHandler(async (req, res) => {
  sendResponse(res, STATUS_CODES.SUCCESS, about, "About fetched successfully");
 });
 
-export const updateAboutController = asyncHandler(async (req, res) => {
+const updateAboutController = asyncHandler(async (req, res) => {
   const { heading, description, pageName, serviceId } = req.body;
 
   // Check if the about section exists
@@ -62,7 +63,7 @@ export const updateAboutController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, updatedAbout, UPDATE_SUCCESS("About section"));
 });
 
-export const deleteAboutController = asyncHandler(async (req, res) => {
+const deleteAboutController = asyncHandler(async (req, res) => {
   const { pageName, serviceId } = req.query;
 
   const deleteAbout = await AboutModel.findOneAndDelete({ pageName, serviceId });
@@ -75,3 +76,10 @@ export const deleteAboutController = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("About"));
 });
+
+module.exports = {
+  createAboutController,
+  getAboutController,
+  updateAboutController,
+  deleteAboutController
+};

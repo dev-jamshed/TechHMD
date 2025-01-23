@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const trafficSchema = new mongoose.Schema({
   ip: String,
@@ -9,4 +9,4 @@ const trafficSchema = new mongoose.Schema({
 
 const Traffic = mongoose.model('Traffic', trafficSchema);
 
-export default Traffic;
+module.exports = Traffic;

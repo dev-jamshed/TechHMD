@@ -1,5 +1,5 @@
-import ApiError from './ApiError.js';
-import { STATUS_CODES } from './constants/statusCodes.js';
+const ApiError = require('./ApiError.js');
+const { STATUS_CODES } = require('./constants/statusCodes.js');
 
 const checkNotFound = (resource, data) => {
   if (!data || (Array.isArray(data) && data.length === 0)) {
@@ -7,4 +7,4 @@ const checkNotFound = (resource, data) => {
   }
 };
 
-export default checkNotFound;
+module.exports = checkNotFound;

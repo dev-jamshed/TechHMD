@@ -1,6 +1,6 @@
-import {z} from "zod"
+const { z } = require("zod");
 
-export const faqValidationSchema = z.object({
+const faqValidationSchema = z.object({
     question: z
         .string({
             required_error: "Question is required",
@@ -17,4 +17,6 @@ export const faqValidationSchema = z.object({
         .min(5, { message: "Answer must be at least 5 characters long" })
         .max(1000, { message: "Answer must not exceed 1000 characters" }),
 });
+
+module.exports = { faqValidationSchema };
 

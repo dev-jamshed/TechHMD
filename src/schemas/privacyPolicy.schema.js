@@ -1,7 +1,9 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
-export const privacyPolicySchema = z.object({
+const privacyPolicySchema = z.object({
     title: z.string(),
     content: z.string(),
     image: z.string().optional()
 });
+
+module.exports = { privacyPolicySchema };

@@ -1,11 +1,11 @@
-import express from "express";
-import { createBlog, deleteBlog, getBlog, getBlogs, updateBlog } from "../controllers/admin/blog.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { blogSchema } from "../schemas/blog/blog.schema.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { COVER, PARAM, PARAM_AND_BODY, PRODUCTION } from '../utils/constants/global.js'
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js'
+const express = require("express");
+const { createBlog, deleteBlog, getBlog, getBlogs, updateBlog } = require("../controllers/admin/blog.controller.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { blogSchema } = require("../schemas/blog/blog.schema.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { COVER, PARAM, PARAM_AND_BODY, PRODUCTION } = require('../utils/constants/global.js');
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.get('/', getBlogs);
 router.put('/:id', verifyJwt, upload.single(COVER), validateRequest({ ...ZodWrapper({ id: ValidMongoId }), ...blogSchema }, PARAM_AND_BODY), updateBlog);
 router.delete('/:id', verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteBlog);
 
-export default router;
+module.exports = router;

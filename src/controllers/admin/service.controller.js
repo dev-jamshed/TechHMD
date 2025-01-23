@@ -1,13 +1,14 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { Service } from "../../models/service.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { addServiceToSitemap, updateServiceInSitemap } from "../../utils/sitemap.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import { Types } from 'mongoose';
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { Service } = require("../../models/service.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { addServiceToSitemap, updateServiceInSitemap } = require("../../utils/sitemap.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const { Types } = require('mongoose');
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 const createServiceController = asyncHandler(async (req, res) => {
   const { name, description, slug, parentService, metaTitle, metaDescription } = req.body;
@@ -215,4 +216,4 @@ const deleteServiceController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Service"));
 });
 
-export { createServiceController, getAllServicesController, getServiceBySlugController, updateServiceController, deleteServiceController, getSubServices, getParentServices, getAllParentServicesSlugs, getAllSubServicesSlugs };
+module.exports = { createServiceController, getAllServicesController, getServiceBySlugController, updateServiceController, deleteServiceController, getSubServices, getParentServices, getAllParentServicesSlugs, getAllSubServicesSlugs };

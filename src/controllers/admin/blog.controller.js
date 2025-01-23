@@ -1,13 +1,14 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { BlogsModel } from "../../models/blog.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { BlogsModel } = require("../../models/blog.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // Create a new Blog
-export const createBlog = asyncHandler(async (req, res) => {
+const createBlog = asyncHandler(async (req, res) => {
   let cover;
   const coverLocalPath = req.file?.path;
 
@@ -26,7 +27,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 });
 
 // Get a Blog by ID
-export const getBlog = asyncHandler(async (req, res) => {
+const getBlog = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const blog = await BlogsModel.findById(id);
 
@@ -36,7 +37,7 @@ export const getBlog = asyncHandler(async (req, res) => {
 });
 
 // Get all Blogs
-export const getBlogs = asyncHandler(async (req, res) => {
+const getBlogs = asyncHandler(async (req, res) => {
   const blogs = await BlogsModel.find();
 
   checkNotFound("Blogs", blogs);
@@ -44,7 +45,7 @@ export const getBlogs = asyncHandler(async (req, res) => {
 });
 
 // Update a Blog
-export const updateBlog = asyncHandler(async (req, res) => {
+const updateBlog = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   // Check if the blog exists
@@ -79,7 +80,7 @@ export const updateBlog = asyncHandler(async (req, res) => {
 });
 
 // Delete a Blog
-export const deleteBlog = asyncHandler(async (req, res) => {
+const deleteBlog = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const blog = await BlogsModel.findByIdAndDelete(id);
@@ -92,3 +93,11 @@ export const deleteBlog = asyncHandler(async (req, res) => {
 
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Blog"));
 });
+
+module.exports = {
+  createBlog,
+  getBlog,
+  getBlogs,
+  updateBlog,
+  deleteBlog,
+};

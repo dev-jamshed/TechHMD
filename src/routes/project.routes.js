@@ -1,10 +1,10 @@
-import express from "express";
-import { getProjectController, createProjectController, updateProjectController, deleteProjectController, getAllProjectsController } from "../controllers/admin/project.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { projectSchema } from "../schemas/project.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM_AND_BODY } from "../utils/constants/global.js";
+const express = require("express");
+const { getProjectController, createProjectController, updateProjectController, deleteProjectController, getAllProjectsController } = require("../controllers/admin/project.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { projectSchema } = require("../schemas/project.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -30,4 +30,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, deleteProjectController);
 
-export default router;
+module.exports = router;

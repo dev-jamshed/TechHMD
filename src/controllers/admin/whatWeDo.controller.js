@@ -1,11 +1,12 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import { WhatWeDo } from "../../models/WhatWeDo.model.js";
-import uploadOnServer, { deleteImageFromServer } from "../../utils/cloudinary.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const ApiError = require("../../utils/ApiError.js");
+const { WhatWeDo } = require("../../models/WhatWeDo.model.js");
+const uploadOnServer = require("../../utils/cloudinary.js").default;
+const { deleteImageFromServer } = require("../../utils/cloudinary.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
 
 // Create new service
 const createWhatWeDo = asyncHandler(async (req, res) => {
@@ -105,4 +106,4 @@ const deleteService = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Service"));
 });
 
-export { createWhatWeDo, getAllServices, getServiceById, updateService, deleteService };
+module.exports = { createWhatWeDo, getAllServices, getServiceById, updateService, deleteService };

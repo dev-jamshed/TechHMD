@@ -1,10 +1,10 @@
-import express from "express";
-import { createOrUpdateHomeController, getHomeController } from "../controllers/admin/home.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { homeSchema } from "../schemas/home.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM_AND_BODY } from "../utils/constants/global.js";
+const express = require("express");
+const { createOrUpdateHomeController, getHomeController } = require("../controllers/admin/home.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { homeSchema } = require("../schemas/home.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -18,4 +18,4 @@ router.post(
   createOrUpdateHomeController
 );
 
-export default router;
+module.exports = router;

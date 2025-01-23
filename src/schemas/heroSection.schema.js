@@ -1,6 +1,6 @@
-import { z } from "zod";
+const { z } = require("zod");
 
-export const heroSectionSchema = z.object({
+const heroSectionSchema = z.object({
   title: z.string().nonempty("Title is required"),
   description: z.string().nonempty("Description is required"),
   buttonText: z.string().optional(),
@@ -12,3 +12,5 @@ export const heroSectionSchema = z.object({
   message: "Either pageName or serviceId is required",
   path: ["pageName", "serviceId"],
 });
+
+module.exports = { heroSectionSchema };

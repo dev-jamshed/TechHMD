@@ -1,6 +1,6 @@
-import { CompanyDetailModel } from "../models/companyDetail.model.js";
+const { CompanyDetailModel } = require("../models/companyDetail.model.js");
 
-export const addSlugToRobotsTxt = async (slug, moduleName) => {
+const addSlugToRobotsTxt = async (slug, moduleName) => {
   try {
     // Fetch the existing CompanyDetail record
     const companyDetail = await CompanyDetailModel.findOne();
@@ -37,3 +37,5 @@ export const addSlugToRobotsTxt = async (slug, moduleName) => {
     throw new Error("Failed to update robots.txt content");
   }
 };
+
+module.exports = { addSlugToRobotsTxt };

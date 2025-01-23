@@ -1,12 +1,12 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import { PageMetaTags } from "../../models/pageMetaTags.model.js";
-import { STATUS_CODES } from "../../utils/constants/statusCodes.js";
-import checkNotFound from "../../utils/checkNotFound.js";
-import sendResponse from "../../utils/responseHandler.js";
-import { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } from "../../utils/constants/message.js";
+const asyncHandler = require("../../utils/asyncHandler.js");
+const { PageMetaTags } = require("../../models/pageMetaTags.model.js");
+const { STATUS_CODES } = require("../../utils/constants/statusCodes.js");
+const checkNotFound = require("../../utils/checkNotFound.js");
+const sendResponse = require("../../utils/responseHandler.js");
+const { CREATE_SUCCESS, UPDATE_SUCCESS, DELETE_SUCCESS } = require("../../utils/constants/message.js");
 
 // POST: Create Page Meta Tags
-export const createPageMetaTags = asyncHandler(async (req, res) => {
+const createPageMetaTags = asyncHandler(async (req, res) => {
     const { pageName, metaTitle, metaDescription, metaKeyword, pageContent, organizationSchema } = req.body;
     const existingPageMetaTags = await PageMetaTags.findOne({ pageName });
     if (existingPageMetaTags) {
@@ -17,14 +17,14 @@ export const createPageMetaTags = asyncHandler(async (req, res) => {
 });
 
 // GET: Fetch all Page Meta Tags
-export const getPageMetaTags = asyncHandler(async (req, res) => {
+const getPageMetaTags = asyncHandler(async (req, res) => {
     const pageMetaTags = await PageMetaTags.find();
     checkNotFound("Page Meta Tags", pageMetaTags);
     sendResponse(res, STATUS_CODES.SUCCESS, pageMetaTags, "Page Meta Tags fetched successfully");
 });
 
 // GET: Fetch single Page Meta Tags by pageName
-export const getPageMetaTagsByPageName = asyncHandler(async (req, res) => {
+const getPageMetaTagsByPageName = asyncHandler(async (req, res) => {
     const { pageName } = req.params;
     const pageMetaTags = await PageMetaTags.findOne({ pageName });
     checkNotFound("Page Meta Tags", pageMetaTags);
@@ -32,7 +32,7 @@ export const getPageMetaTagsByPageName = asyncHandler(async (req, res) => {
 });
 
 // PUT: Update Page Meta Tags by pageName
-export const updatePageMetaTags = asyncHandler(async (req, res) => {
+const updatePageMetaTags = asyncHandler(async (req, res) => {
     const { pageName } = req.params;
     const updatedMetaTags = req.body;
     const pageMetaTags = await PageMetaTags.findOneAndUpdate({ pageName }, updatedMetaTags, { new: true });
@@ -41,10 +41,18 @@ export const updatePageMetaTags = asyncHandler(async (req, res) => {
 });
 
 // DELETE: Delete Page Meta Tags by pageName
-export const deletePageMetaTags = asyncHandler(async (req, res) => {
+const deletePageMetaTags = asyncHandler(async (req, res) => {
     const { pageName } = req.params;
     const pageMetaTags = await PageMetaTags.findOneAndDelete({ pageName });
     checkNotFound("Page Meta Tags", pageMetaTags);
     sendResponse(res, STATUS_CODES.SUCCESS, pageMetaTags, DELETE_SUCCESS("Page Meta Tags"));
 });
+
+module.exports = {
+    createPageMetaTags,
+    getPageMetaTags,
+    getPageMetaTagsByPageName,
+    updatePageMetaTags,
+    deletePageMetaTags
+};
 

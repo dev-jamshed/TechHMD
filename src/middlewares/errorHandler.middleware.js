@@ -1,6 +1,6 @@
-import ErrorLog from '../models/errorLog.model.js';
+const ErrorLog = require('../models/errorLog.model.js');
 
-export const ApiErrorHandler = async (err, req, res, next) => {
+const ApiErrorHandler = async (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal Server Error";
     const errors = err.errors || [];
@@ -21,3 +21,5 @@ export const ApiErrorHandler = async (err, req, res, next) => {
         stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
 };
+
+module.exports = { ApiErrorHandler };

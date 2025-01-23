@@ -1,4 +1,4 @@
-import { z } from 'zod';
+const { z } = require('zod');
 
 const packageSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -8,4 +8,4 @@ const packageSchema = z.object({
   description: z.string().optional(),
 });
 
-export { packageSchema };
+module.exports = { packageSchema };

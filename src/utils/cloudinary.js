@@ -1,14 +1,8 @@
-import { v2 as cloudinary } from "cloudinary";
-import path from 'path';
-import { fileURLToPath } from "url";
-import { STATUS_CODES } from "./constants/statusCodes.js";
-import { INTERNAL_SERVER_ERROR } from "./constants/message.js";
-import ApiError from "./ApiError.js";
-import asyncHandler from "./asyncHandler.js";
-import fs from "fs";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const path = require('path');
+const { STATUS_CODES } = require("./constants/statusCodes.js");
+const { INTERNAL_SERVER_ERROR } = require("./constants/message.js");
+const ApiError = require("./ApiError.js");
+const fs = require("fs");
 
 const uploadOnServer = async (filePath) => {
   const fileName = path.basename(filePath);
@@ -27,7 +21,7 @@ const uploadOnServer = async (filePath) => {
   }
 };
 
-export const deleteImageFromServer = async (url) => {
+const deleteImageFromServer = async (url) => {
   try {
     const fileName = url.split('/').pop();
     const filePath = path.join(__dirname, '../../public/uploads', fileName);
@@ -42,4 +36,7 @@ export const deleteImageFromServer = async (url) => {
   }
 };
 
-export default uploadOnServer;
+module.exports = {
+  uploadOnServer,
+  deleteImageFromServer
+};

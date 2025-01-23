@@ -1,17 +1,17 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createWhatWeDo,
   getAllServices,
   getServiceById,
   updateService,
   deleteService,
-} from "../controllers/admin/whatWeDo.controller.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { serviceSchema } from "../schemas/whatWeDo.schema.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
+} = require("../controllers/admin/whatWeDo.controller.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { serviceSchema } = require("../schemas/whatWeDo.schema.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
 
 const router = express.Router();
 
@@ -38,4 +38,4 @@ router.delete(
   deleteService
 );
 
-export default router;
+module.exports = router;

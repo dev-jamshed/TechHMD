@@ -1,11 +1,11 @@
-import express from 'express';
-import { AVATAR, PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
-import { ourCoreTeamSchema } from "../schemas/ourCoreTem.schema.js";
-import { ValidMongoId, ZodWrapper } from '../utils/global.js';
-import { createOurCoreTeam, getOurCoreTeam, updateOurCoreTeam, deleteOurCoreTeam ,getFeaturedOurCoreTeam} from '../controllers/admin/ourCoreTeam.controller.js';
-import { verifyJwt } from '../middlewares/verifyJwt.middleware.js';
-import { upload } from "../middlewares/multer.middleware.js";
-import { validateRequest } from '../middlewares/validation.middleware.js';
+const express = require('express');
+const { AVATAR, PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
+const { ourCoreTeamSchema } = require("../schemas/ourCoreTem.schema.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
+const { createOurCoreTeam, getOurCoreTeam, updateOurCoreTeam, deleteOurCoreTeam, getFeaturedOurCoreTeam } = require('../controllers/admin/ourCoreTeam.controller.js');
+const { verifyJwt } = require('../middlewares/verifyJwt.middleware.js');
+const { upload } = require("../middlewares/multer.middleware.js");
+const { validateRequest } = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
@@ -34,4 +34,4 @@ router.delete(
     deleteOurCoreTeam
 );
 
-export default router;
+module.exports = router;

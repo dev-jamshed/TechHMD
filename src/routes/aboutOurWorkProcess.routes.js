@@ -1,18 +1,17 @@
-import express from "express";
-import {
+const express = require("express");
+const {
     createAboutOurWorkProcess,
     getAboutOurWorkProcesses,
     getAboutOurWorkProcessById,
     updateAboutOurWorkProcess,
     deleteAboutOurWorkProcess
-} from "../controllers/admin/aboutOurWorkProcess.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js"; // Multer for file upload
-import { aboutOurWorkProcessSchema } from "../schemas/aboutOurWorkProcess.schema.js";
-import { validateRequest } from "../middlewares/validation.middleware.js";
-import { PARAM, PARAM_AND_BODY } from "../utils/constants/global.js";
-
-import { ValidMongoId, ZodWrapper } from '../utils/global.js'
+} = require("../controllers/admin/aboutOurWorkProcess.controller.js");
+const { verifyJwt } = require("../middlewares/verifyJwt.middleware.js");
+const { upload } = require("../middlewares/multer.middleware.js");
+const { aboutOurWorkProcessSchema } = require("../schemas/aboutOurWorkProcess.schema.js");
+const { validateRequest } = require("../middlewares/validation.middleware.js");
+const { PARAM, PARAM_AND_BODY } = require("../utils/constants/global.js");
+const { ValidMongoId, ZodWrapper } = require('../utils/global.js');
 
 const router = express.Router();
 
@@ -38,4 +37,4 @@ router.put(
 
 router.delete("/:id", verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), deleteAboutOurWorkProcess);
 
-export default router;
+module.exports = router;

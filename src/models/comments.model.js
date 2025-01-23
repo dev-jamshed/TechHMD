@@ -1,4 +1,5 @@
-import mongoose, { Types } from 'mongoose'
+const mongoose = require('mongoose');
+const { Types } = mongoose;
 
 const schema = new mongoose.Schema({
     blog: {
@@ -16,4 +17,5 @@ const schema = new mongoose.Schema({
     },
 })
 
-export const CommentsModel = mongoose.model("Comment", schema)
+const CommentsModel = mongoose.model("Comment", schema);
+module.exports = { CommentsModel };
