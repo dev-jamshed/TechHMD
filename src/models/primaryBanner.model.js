@@ -19,11 +19,15 @@ const primaryBannerSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+
+
     pageName: {
         type: String,
-        required: true,
+        required: false,
         trim: true
-    }
+    },
+
+    serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: false },
 }, {
     timestamps: true
 });

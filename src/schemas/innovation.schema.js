@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const innovationItemSchema = z.object({
-    icon: z.string().url(),
+    // icon: z.string().url(),
     title: z.string(),
     description: z.string(),
 });

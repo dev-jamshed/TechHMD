@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const aboutOurWorkProcessSchema = new mongoose.Schema({
   icon: {
     type: String,
-    required: true
+    required: false
   },
   title: {
     type: String,

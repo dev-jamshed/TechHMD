@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    serviceID: {
+    serviceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Service",
       required: true,

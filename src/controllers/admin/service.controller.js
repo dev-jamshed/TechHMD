@@ -36,15 +36,20 @@ const createServiceController = asyncHandler(async (req, res) => {
     metaTitle,
     metaDescription,
     logo: logo?.url,
-  });
+  })
+
 
   if (!service) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, "Something went wrong while registering the service");
   }
 
-  const updatedSitemap = await addServiceToSitemap(slug);
+  if (service.parentService) {
+    service.populate("parentService", "_id name")
+  }
 
-  sendResponse(res, STATUS_CODES.CREATED, { service, sitemap: updatedSitemap }, CREATE_SUCCESS("Service"));
+const updatedSitemap = await addServiceToSitemap(slug);
+
+sendResponse(res, STATUS_CODES.CREATED, { service, sitemap: updatedSitemap }, CREATE_SUCCESS("Service"));
 });
 
 const getParentServices = asyncHandler(async (req, res) => {
@@ -123,15 +128,69 @@ const getAllServicesController = asyncHandler(async (req, res) => {
 
     :
 
+    // [
+    //   {
+    //     $lookup: {
+    //       from: "services",
+    //       let: { "serviceId": "$_id" },
+    //       pipeline: [
+    //         { $match: { $expr: { $eq: ["$parentService", "$$serviceId"] } } },
+    //       ],
+    //       as: "childrenServices"
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "services",
+    //       localField: "parentService",
+    //       foreignField: "_id",
+    //       as: "parentService"
+    //     }
+    //   },
+    //   {
+    //     $project: {
+    //       parentService: { $arrayElemAt: ["$parentService", 0] },
+    //       // "parentService._id": 1,
+    //       // "parentService.name": 1,
+    //       childrenServices: 1
+    //     }
+    //   }
+
+    // ]
+
     [
       {
         $lookup: {
           from: "services",
-          let: { "serviceId": "$_id" },
+          let: { serviceId: "$_id" },
           pipeline: [
-            { $match: { $expr: { $eq: ["$parentService", "$$serviceId"] } } },
+            { $match: { $expr: { $eq: ["$parentService", "$$serviceId"] } } }
           ],
           as: "childrenServices"
+        }
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "parentService",
+          foreignField: "_id",
+          as: "parentService"
+        }
+      },
+      {
+        $addFields: {
+          parentService: {
+            $arrayElemAt: [
+              {
+                $map: {
+                  input: "$parentService",
+                  as: "ps",
+                  in: { _id: "$$ps._id", name: "$$ps.name" }
+                }
+              },
+              0
+            ]
+          }
         }
       }
     ]
@@ -191,15 +250,15 @@ const updateServiceController = asyncHandler(async (req, res) => {
     metaTitle,
     metaDescription,
     slug: newSlug || slug,
-    ...(logo && { logo: logo.url }) // Only add logo if it exists
+    ...(logo && { logo: logo.url })
   };
 
   const service = await Service.findOneAndUpdate(
     { slug },
     serviceDetails,
     { new: true }
-  );
-  
+  ).populate("parentService", "_id name")
+
   checkNotFound("service", service);
   const updatedSitemap = await updateServiceInSitemap(slug, newSlug || slug);
   sendResponse(res, STATUS_CODES.SUCCESS, { service, sitemap: updatedSitemap }, UPDATE_SUCCESS("Service"));
@@ -215,4 +274,14 @@ const deleteServiceController = asyncHandler(async (req, res) => {
   sendResponse(res, STATUS_CODES.SUCCESS, null, DELETE_SUCCESS("Service"));
 });
 
-export { createServiceController, getAllServicesController, getServiceBySlugController, updateServiceController, deleteServiceController, getSubServices, getParentServices, getAllParentServicesSlugs, getAllSubServicesSlugs };
+export {
+  createServiceController,
+  getAllServicesController,
+  getServiceBySlugController,
+  updateServiceController,
+  deleteServiceController,
+  getSubServices,
+  getParentServices,
+  getAllParentServicesSlugs,
+  getAllSubServicesSlugs
+};

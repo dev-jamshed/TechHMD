@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const schema = new mongoose.Schema(
   {
-    type: {
-      type: String, 
-      unique: true,
-      required: true,
-      trim: true,
-    },
     heading: {
       type: String,
       required: true,
@@ -17,9 +11,15 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    media: {
+    pageName: {
       type: String,
       required: false,
+      trim: true,
+    },
+    serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: false },
+    media: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

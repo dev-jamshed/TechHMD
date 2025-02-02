@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 const innovationItemSchema = new mongoose.Schema({
-    icon: {
-        type: String,
-        required: true
-    },
+    // icon: {
+    //     type: String,
+    //     required: true
+    // },
     title: {
         type: String,
         required: true

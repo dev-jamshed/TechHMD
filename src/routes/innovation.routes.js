@@ -18,7 +18,7 @@ router.get("/", getInnovations);
 router.post(
     "/create",
     verifyJwt,
-    validateRequest(innovationSchema, PARAM_AND_BODY),
+    validateRequest(innovationSchema),
     createInnovation
 );
 

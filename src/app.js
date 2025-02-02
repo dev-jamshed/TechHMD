@@ -17,12 +17,11 @@ const __dirname = path.dirname(__filename);
 app.use(cors({
     credentials: true,
     origin: (origin, callback) => {
-        const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN];
-    
+        const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN, "http://localhost:3001"];
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new ApiError('Not allowed by CORS'));
+            callback(new ApiError(403, 'Not allowed by CORS'));
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

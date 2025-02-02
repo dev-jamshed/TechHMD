@@ -54,14 +54,14 @@ const loginController = asyncHandler(async (req, res) => {
   if (!isValid) {
     throw new ApiError(STATUS_CODES.UN_AUTHORIZED, INVALID_CREDENTIALS);
   }
-
   const jwtToken = generateJwtToken(user._id, user.email);
   try {
+
     res.cookie(ACCESS_TOKEN, jwtToken, {
-      maxAge: process.env.COOKIE_MAX_AGE,
-      secure: process.env.ENV == PRODUCTION,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'lax',
     }).status(STATUS_CODES.SUCCESS).json(
-      new ApiResponse(STATUS_CODES.SUCCESS, { jwtToken, user: { ...user["_doc"], password: "" } }, LOGIN_SUCCESS(user.name))
+      new ApiResponse(STATUS_CODES.SUCCESS, { jwtToken, user: { ...user["_doc"], password: "" } }, LOGIN_SUCCESS)
     );
   } catch (error) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, "Error setting cookie");
@@ -73,7 +73,7 @@ const logout = asyncHandler(async (req, res) => {
     res.clearCookie(ACCESS_TOKEN, {
       secure: process.env.ENV == PRODUCTION,
     }).status(STATUS_CODES.SUCCESS).json(
-      new ApiResponse(STATUS_CODES.SUCCESS, null, LOGOUT_SUCCESS(req.user.name))
+      new ApiResponse(STATUS_CODES.SUCCESS, null, LOGOUT_SUCCESS)
     );
   } catch (error) {
     throw new ApiError(STATUS_CODES.INTERNAL_SERVER_ERROR, "Error clearing cookie");

@@ -16,8 +16,8 @@ import {
 
 const router = express.Router();
 
-router.post('/create', validateRequest(packageSchema), createPackageController);
-router.get('/', verifyJwt, getAllPackagesController);
+router.post('/create', verifyJwt, validateRequest(packageSchema), createPackageController);
+router.get('/', getAllPackagesController);
 router.get('/:id', verifyJwt, validateRequest(ZodWrapper({ id: ValidMongoId }), PARAM), getPackageByIdController);
 router.get('/service/:serviceId', validateRequest(ZodWrapper({ serviceId: ValidMongoId }), PARAM), getPackagesByServiceIdController);
 router.put('/:id', verifyJwt, validateRequest({ ...ZodWrapper({ id: ValidMongoId }), ...packageSchema }, PARAM_AND_BODY), updatePackageController);

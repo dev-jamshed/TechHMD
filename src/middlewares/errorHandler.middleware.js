@@ -5,7 +5,6 @@ export const ApiErrorHandler = async (err, req, res, next) => {
     const message = err.message || "Internal Server Error";
     const errors = err.errors || [];
 
-    // Log error to database
     await ErrorLog.create({
         message,
         statusCode,

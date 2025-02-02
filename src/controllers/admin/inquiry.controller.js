@@ -36,7 +36,7 @@ export const getAllInquiriesController = asyncHandler(async (req, res) => {
 
 export const getInquiryByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const inquiry = await InquiryModel.findById(id).populate("ServiceId");
+  const inquiry = await InquiryModel.findById(id).populate("ServiceId", "_id name");
 
   checkNotFound("inquiry", inquiry);
 

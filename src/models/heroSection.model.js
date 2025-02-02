@@ -8,7 +8,7 @@ const heroSectionSchema = new mongoose.Schema(
     buttonText: { type: String, required: false },
     buttonLink: { type: String, required: false },
     pageName: { type: String, required: false },
-    serviceId: { type: String, required: false }
+    serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: false },
   },
   { timestamps: true } 
 );

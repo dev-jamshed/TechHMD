@@ -9,6 +9,7 @@ export const validateRequest = (schema, type, parse) => (req, res, next) => {
       parse.forEach(key => req.body[key] = JSON.parse(req.body[key]));
     }
 
+
     if (type == PARAM) {
       schema.parse(req.params)
       return next()

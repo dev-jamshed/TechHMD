@@ -8,8 +8,11 @@ import { verifyJwt } from "../middlewares/verifyJwt.middleware.js";
 
 const router = express.Router();
 
-router.post('/register', upload.single('avatar'), validateRequest(registerSchema), registerController);
+// router.post('/register', upload.single('avatar'), validateRequest(registerSchema), registerController);
 router.get('/', verifyJwt, getAdmin);
+router.post('/validate-token', verifyJwt, (req, res) => {
+    res.status(200).json({ message: "token is valid" })
+});
 
 router.post('/login', validateRequest(loginSchema), loginController);
 router.get('/logout', verifyJwt, logout);
